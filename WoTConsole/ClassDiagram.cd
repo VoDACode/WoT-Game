@@ -1,0 +1,194 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="WoTConsole.Helpers.ConsoleHelper" Collapsed="true">
+    <Position X="14.5" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>QIgECEAAAAAADAAAAAAIAAAAAwAAAgIAAAAAAAAgAJA=</HashCode>
+      <FileName>Helpers\ConsoleHelper.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="WoTConsole.Helpers.CreateMenuHelper" Collapsed="true">
+    <Position X="16.25" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Helpers\CreateMenuHelper.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="WoTConsole.Menu.BaseMenu" Collapsed="true">
+    <Position X="7.5" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>ACQCCAAQggBAgiAqYgAACAQAAJgIkAAEgEEAYAj4iIA=</HashCode>
+      <FileName>Menu\BaseMenu.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="WoTConsole.Menu.CreateGameMenu" Collapsed="true">
+    <Position X="7.5" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>ASQAEAAAAAAAAAAgAAACgAQAAAAAgCgAAAAAYABAAAA=</HashCode>
+      <FileName>Menu\CreateGameMenu.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="WoTConsole.Menu.GameListMenu" Collapsed="true">
+    <Position X="9.75" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AQFAAAAAQAAAAAAgAAAAAAQAAAAAgAAAAAAAIEBAAAA=</HashCode>
+      <FileName>Menu\GameListMenu.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="WoTConsole.Menu.GameMenu" Collapsed="true">
+    <Position X="12" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAIgAAAAAAQAABAAkAAAgAAAIQAASIA=</HashCode>
+      <FileName>Menu\GameMenu.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="WoTConsole.Menu.RestartGameMenu" Collapsed="true">
+    <Position X="3" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAIiCAAAAAQAAAAAgAAAAAAAIABggAA=</HashCode>
+      <FileName>Menu\RestartGameMenu.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="WoTConsole.Menu.StartMenu" Collapsed="true">
+    <Position X="5.25" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>ACQAAAAAAIAAAAAgAAgAAAQAAAIAggAAAAAAIQBAAAA=</HashCode>
+      <FileName>Menu\StartMenu.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="WoTConsole.Models.MenuComponentModel" Collapsed="true">
+    <Position X="16.25" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACAAAAAQ=</HashCode>
+      <FileName>Models\MenuComponentModel.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="WoTConsole.Models.MenuOkSet" Collapsed="true">
+    <Position X="19.75" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAIABAAAAAAAAAAAAA=</HashCode>
+      <FileName>Models\MenuOkSet.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="WoTConsole.Models.MenuOpenResponse" Collapsed="true">
+    <Position X="14.5" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Models\MenuOpenResponse.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="WoTConsole.Models.MenuRequest" Collapsed="true">
+    <Position X="18" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAQAAAAAABAAAAAAAAAAAAA=</HashCode>
+      <FileName>Models\MenuRequest.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="WoTConsole.Models.MenuResponse" Collapsed="true">
+    <Position X="19.75" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAABAAAAAAAAAAAAA=</HashCode>
+      <FileName>Models\MenuResponse.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="WoTConsole.Models.MenuResponseCreateGeme" Collapsed="true">
+    <Position X="14.5" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAQAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Models\MenuResponseCreateGeme.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="WoTConsole.Models.MenuSetString" Collapsed="true">
+    <Position X="16.25" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAACAAAAAAAAAAACAAAAAABAAAAAAAAAIAAA=</HashCode>
+      <FileName>Models\MenuSetString.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="WoTConsole.Options.MenuOptions" Collapsed="true">
+    <Position X="16.25" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAJAAA=</HashCode>
+      <FileName>Options\MenuOptions.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="WoTConsole.Services.ControlService" Collapsed="true">
+    <Position X="5.25" Y="4.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AgAAAAAwAAAAAAUAAAAAAAAECABAAAAAQAAAABAEIAA=</HashCode>
+      <FileName>Services\ControlService.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="WoTConsole.Services.DisplayInfoZone" Collapsed="true">
+    <Position X="18" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>BgAEQAAAgAgAgAgAAAAQAAAgAAAAACAAQMACAAAAwAA=</HashCode>
+      <FileName>Services\DisplayInfoZone.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="WoTConsole.Services.DisplayService" Collapsed="true">
+    <Position X="3" Y="4.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAQAAAAAACAgAQQAAAAgABCAABAAAEAQAAAAAAAAAA=</HashCode>
+      <FileName>Services\DisplayService.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="WoTConsole.Services.Http" Collapsed="true">
+    <Position X="14.5" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAABAAAAABAAACAAAAAAAAAAABAAAAAA=</HashCode>
+      <FileName>Services\Http.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="WoTConsole.Services.NetworkServise" Collapsed="true">
+    <Position X="7.5" Y="4.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>gABCAQgAAAAAAA5ACGADAIAgSABMCQAAQWAABBIA0IA=</HashCode>
+      <FileName>Services\NetworkServise.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="WoTConsole.Services.Service" Collapsed="true">
+    <Position X="5.25" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAACAAAAUAAAAAAAAAAAAAAAAAIAAAgAAAgAA=</HashCode>
+      <FileName>Services\Service.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="WoTConsole.Game" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="19.75" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAEAAAAACAAAAAAAAGAAAAAAAAAAAAAQAAAAQAAACA=</HashCode>
+      <FileName>Game.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="WoTConsole.MenuConfig" Collapsed="true">
+    <Position X="18" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAEAAKAAAAQgAAAAAAAAAAAABAAAAAAAAAAA=</HashCode>
+      <FileName>MenuConfig.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Delegate Name="WoTConsole.Services.PressKey" Collapsed="true">
+    <Position X="14.5" Y="4.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAgAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Services\ControlService.cs</FileName>
+    </TypeIdentifier>
+  </Delegate>
+  <Delegate Name="WoTConsole.Services.TickEvent" Collapsed="true">
+    <Position X="16.25" Y="4.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAgAAAA=</HashCode>
+      <FileName>Services\NetworkServise.cs</FileName>
+    </TypeIdentifier>
+  </Delegate>
+  <Delegate Name="WoTConsole.Services.UpdateGamesList" Collapsed="true">
+    <Position X="18" Y="4.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>gAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Services\NetworkServise.cs</FileName>
+    </TypeIdentifier>
+  </Delegate>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>

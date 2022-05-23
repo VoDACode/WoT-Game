@@ -1,0 +1,251 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="WoTCore.Helpers.StringHelper" Collapsed="true">
+    <Position X="15.25" Y="2.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAABAAAAAAAAAAAIAA=</HashCode>
+      <FileName>Helpers\StringHelper.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="WoTCore.Models.MapModel" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="13.5" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAgAAAABAAAAAAAAAAAAAAAAAEAAAA=</HashCode>
+      <FileName>Models\MapModel.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="WoTCore.Models.PlayerModel" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="15.25" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAACoAAKIAAgAQAgAAGCBAQABAAAAAIgAAAAgBEBEGA=</HashCode>
+      <FileName>Models\PlayerModel.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="WoTCore.Models.Position" Collapsed="true">
+    <Position X="17" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAkAAAAAAAAgAAAAAAAABgAAAAYAA=</HashCode>
+      <FileName>Models\Position.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="WoTCore.Models.ProjectileModel" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="11.75" Y="2.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAACAAAAAAAQgAAACAAABAAAAAAAADAAAAAEBUAA=</HashCode>
+      <FileName>Models\ProjectileModel.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="WoTCore.Modes.AssemblyInfo" Collapsed="true">
+    <Position X="11.75" Y="0.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>IAAAAAAAAAAgAAAAgAAAAAQAAAAAAAACAAAAAAAAAAA=</HashCode>
+      <FileName>Modes\AssemblyInfo.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="WoTCore.Modes.BaseBlock" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="13.5" Y="0.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQAAAAAAAAgAAAgAAAAAAAACAAAAAAAACAAABEAEAA=</HashCode>
+      <FileName>Modes\BaseBlock.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="WoTCore.Modes.ResourceInfo" Collapsed="true">
+    <Position X="13.5" Y="2.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAQAQAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Modes\ResourceInfo.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="WoTCore.Views.GameInfoView" Collapsed="true">
+    <Position X="17" Y="0.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAACAAQAAAAAAAAAABAAAAQAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Views\GameInfoView.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="WoTCore.Views.JoinGameView" Collapsed="true">
+    <Position X="11.75" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAEABAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Views\JoinGameView.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="WoTCore.Config" Collapsed="true">
+    <Position X="15.25" Y="0.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAgAAAAAAAAA=</HashCode>
+      <FileName>Config.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="System.ConvertTypes" Collapsed="true">
+    <Position X="26.75" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAACAAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Helpers\ConvertTypes.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="WoTCore.Models.EmptyObject" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="28.5" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAgAAAAAAAAAAAAAAAAAAAAAAAAEAA=</HashCode>
+      <FileName>Models\EmptyObject.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="WoTCore.Models.Map" Collapsed="true">
+    <Position X="26.75" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Models\Map.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="WoTCore.Models.NotifyPropertyChangedContext" Collapsed="true">
+    <Position X="21.75" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAIAAAAAAACAEgAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Models\NotifyPropertyChangedContext.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="WoTCore.Modes.BaseEvents" Collapsed="true">
+    <Position X="11.25" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAACAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQAA=</HashCode>
+      <FileName>Modes\BaseEvents.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="WoTCore.Modes.BaseEventsMapElement" Collapsed="true">
+    <Position X="15.25" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAIAAAAAAAAAEAAAAA=</HashCode>
+      <FileName>Modes\BaseEventsMapElement.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="WoTCore.Modes.BaseStructure" Collapsed="true">
+    <Position X="24.25" Y="2" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAEAAAAAAAAAAAgAAAAAAAAAAAAAAAAAAAAABAAEAA=</HashCode>
+      <FileName>Modes\BaseStructure.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Struct Name="WoTCore.Models.CellModel" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="11.75" Y="4" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAgAAAAAAAAIAAACAAAAAAAAAAAAAEAEAA=</HashCode>
+      <FileName>Models\CellModel.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Struct>
+  <Interface Name="WoTCore.Models.Map.IBlock" Collapsed="true">
+    <Position X="3.25" Y="2.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABAAAAA=</HashCode>
+      <FileName>Models\Map\IBlock.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="WoTCore.Models.Map.IStructure" Collapsed="true">
+    <Position X="5.5" Y="2.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Models\Map\IStructure.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="WoTCore.Models.ICell" Collapsed="true">
+    <Position X="6.25" Y="0.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAgAAAAAAAAAAAACAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Models\ICell.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="WoTCore.Models.IIcon" Collapsed="true">
+    <Position X="9.25" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAEAAAA=</HashCode>
+      <FileName>Models\IIcon.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="WoTCore.Models.IPosition" Collapsed="true">
+    <Position X="3.25" Y="1" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAgAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Models\IPosition.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="WoTCore.Models.MapObjects.IBlock" Collapsed="true">
+    <Position X="5.5" Y="5.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACAAABAAAAA=</HashCode>
+      <FileName>Models\MapObjects\IBlock.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="WoTCore.Models.MapObjects.IStructure" Collapsed="true">
+    <Position X="2.5" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Models\MapObjects\IStructure.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="WoTCore.Models.MapObjects.IUniversalId" Collapsed="true">
+    <Position X="8" Y="0.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAEAA=</HashCode>
+      <FileName>Models\MapObjects\IUniversalId.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="WoTCore.Models.ICopy&lt;T&gt;" Collapsed="true">
+    <Position X="26.75" Y="2.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAgAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Models\ICopy.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="WoTCore.Models.IPlayer" Collapsed="true">
+    <Position X="8" Y="5.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAACgAAAAAAgAQAAAAACBAQAAAAAAAIAAAAAAAABAEA=</HashCode>
+      <FileName>Models\IPlayer.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="WoTCore.Modes.IDrow" Collapsed="true">
+    <Position X="28.5" Y="2.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAgAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Modes\IDrow.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="WoTCore.Modes.IEvents" Collapsed="true">
+    <Position X="26.75" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAACAAAAAAAAAAAAAAAAAAIAAAAAAAAAAAAQAA=</HashCode>
+      <FileName>Modes\IEvents.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="WoTCore.Modes.IGenerate" Collapsed="true">
+    <Position X="28.5" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAEAAAAA=</HashCode>
+      <FileName>Modes\IGenerate.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Enum Name="WoTCore.Enums.ResourceType" Collapsed="true">
+    <Position X="11.75" Y="5.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAEAAAAAAAAAAAAAAAAACAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Enums\Enumes.cs</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="WoTCore.Models.TurnObject" Collapsed="true">
+    <Position X="13.5" Y="5.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAQAAAAAAAIAAAACACAAAAAAAA=</HashCode>
+      <FileName>Models\PlayerModel.cs</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>
