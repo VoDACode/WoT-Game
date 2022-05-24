@@ -58,9 +58,12 @@ namespace WoTConsole.Menu
                 {
                     Position lastPos = (obj.Value.Content as IPosition).Position.PreliminaryState<Position>();
                     ICell backCell = obj.Value.Background as ICell;
-                    Field[lastPos.X, lastPos.Y].BackgroundColor = backCell.BackgroundColor;
-                    Field[lastPos.X, lastPos.Y].ForegroundColor = backCell.ForegroundColor;
-                    Field[lastPos.X, lastPos.Y].Icon = backCell.Icon;
+                    if (backCell != null)
+                    {
+                        Field[lastPos.X, lastPos.Y].BackgroundColor = backCell.BackgroundColor;
+                        Field[lastPos.X, lastPos.Y].ForegroundColor = backCell.ForegroundColor;
+                        Field[lastPos.X, lastPos.Y].Icon = backCell.Icon;
+                    }
 
                     if (obj.Value.Content is IPlayer)
                     {
@@ -103,9 +106,12 @@ namespace WoTConsole.Menu
                     else if(obj.Value.Content is IEmptyObject)
                     {
                         ICell back = obj.Value.Background as ICell;
-                        Field[position.X, position.Y].BackgroundColor = back.BackgroundColor;
-                        Field[position.X, position.Y].ForegroundColor = back.ForegroundColor;
-                        Field[position.X, position.Y].Icon = back.Icon;
+                        if (back != null)
+                        {
+                            Field[position.X, position.Y].BackgroundColor = back.BackgroundColor;
+                            Field[position.X, position.Y].ForegroundColor = back.ForegroundColor;
+                            Field[position.X, position.Y].Icon = back.Icon;
+                        }
                     }
                 }
                 else if(obj.Value.Background != default)

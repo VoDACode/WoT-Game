@@ -1,5 +1,6 @@
 ﻿using System;
 using WoTCore.Models;
+using WoTCore.Models.MapObjects;
 using WoTCore.Modes;
 
 namespace DefaultMode.Blocks
@@ -15,6 +16,7 @@ namespace DefaultMode.Blocks
         public override bool IsSpawnArea { get; set; } = false;
         public override bool CanBeBroken { get; set; } = true;
         public override bool IsInteractive { get; set; } = true;
+        public override ICell Background { get; set; } = new Bush();
 
         public override bool Generate(float val)
         {

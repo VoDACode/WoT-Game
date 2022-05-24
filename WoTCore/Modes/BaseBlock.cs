@@ -20,6 +20,7 @@ namespace WoTCore.Modes
         public abstract bool IsSpawnArea { get; set; }
         public virtual bool CanBeBroken { get; set; } = true;
         public abstract bool IsInteractive { get; set; }
+        public virtual ICell Background { get; set; }
 
         public void Damage(int damage)
         {

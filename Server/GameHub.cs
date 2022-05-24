@@ -114,6 +114,11 @@ namespace Server
                         {
                             (content as IBlock).Damage(projectile.Damage);
                             projectile.Life = -1;
+                            game.Map[projectile.GetNextPos].Background = (content as IBlock).Background;
+                            game.Map[projectile.GetNextPos].Content = default;
+                            Dictionary<Position, MapCell> cells = new Dictionary<Position, MapCell>();
+                            cells.Add(projectile.GetNextPos, game.Map[projectile.GetNextPos]);
+                            await hub.Group($"GAME_{game.Id}").SendAsync("GetMap", cells.ToBytes());
                             break;
                         }
                     }
