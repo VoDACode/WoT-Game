@@ -6,6 +6,13 @@ using WoTCore.Models;
 using WoTCore.Helpers;
 using SimplexNoise;
 using WoTCore.Models.MapObjects;
+using Serilog;
+using System.Threading;
+using Microsoft.AspNetCore.SignalR;
+using Newtonsoft.Json;
+using System.IO;
+using System.Diagnostics;
+using System.Text;
 
 namespace Server.Models
 {
@@ -34,7 +41,7 @@ namespace Server.Models
 
         public List<ProjectileModel> Projectiles = new List<ProjectileModel>();
 
-        public Map Map { get; } = new Map(40);
+        public Map Map { get; } = new Map(13);
 
         public GameModel()
         {
@@ -44,41 +51,45 @@ namespace Server.Models
         public GameModel(int id) : this()
         {
             Id = id;
+            Map.GameId = id;
         }
         public GameModel(int id, string name, int playerLimits) : this()
         {
             Id = id;
             Name = name;
             PlayerLimits = playerLimits;
+            Map.GameId = id;
         }
 
-        public int AddPlayer(PlayerModel player)
+        public short AddPlayer(PlayerModel player)
         {
-            int c = commands[0].Players.Count > commands[1].Players.Count ? 1 :
-                    commands[0].Players.Count == commands[1].Players.Count ? 1 : 0;
+            short c = (short)(commands[0].Players.Count > commands[1].Players.Count ? 1 :
+                    commands[0].Players.Count == commands[1].Players.Count ? 1 : 0);
             AddPlayer(player, c);
             return c;
         }
 
-        public int AddPlayer(PlayerModel player, int commandNum)
+        public int AddPlayer(PlayerModel player, short commandNum)
         {
             if (commandNum > 1 || commandNum < 0)
                 throw new ArgumentOutOfRangeException("Command num, was waiting for 0 or 1!");
             if (commands[0].Players.Any(p => p == player) || commands[1].Players.Any(p => p == player))
                 return -1;
+            Log.Debug($"[Player - '{Id}','{Name}'] Command = '{commandNum}'");
             player.Command = commandNum;
             {
                 var pos = new Position();
                 var rand = new Random();
                 do
                 {
-                    pos.X = rand.Next(Map.Size);
+                    Log.Debug($"[Player - '{Id}','{Name}'] Start rand pos...");
+                    pos.X = (short)rand.Next(Map.Size);
                     if (commandNum == 0)
-                        pos.Y = rand.Next(Map.Size / 2 - 5);
+                        pos.Y = (short)rand.Next(Map.Size / 2 - 5);
                     else
-                        pos.Y = rand.Next(Map.Size / 2 - 5, Map.Size);
-                    var a = Map[pos];
-                } while (!(Map[pos].Content == default && ((Map[pos].Background is IBlock) && (Map[pos].Background as IBlock).IsSpawnArea)));
+                        pos.Y = (short)rand.Next(Map.Size / 2 - 5, Map.Size);
+                } while (!((((Map[pos].Background is IBlock) && (Map[pos].Background as IBlock).IsSpawnArea) || Map[pos].Background is MapCell) && Map[pos].Content is EmptyObject));
+                Log.Debug($"[Player - '{Id}','{Name}'] Position = '{pos}'");
                 player.Position = pos;
                 string uid = "";
                 do
@@ -105,8 +116,8 @@ namespace Server.Models
                 var rand = new Random();
                 do
                 {
-                    pos.X = rand.Next(Map.Size);
-                    pos.Y = rand.Next(Map.Size);
+                    pos.X = (short)rand.Next(Map.Size);
+                    pos.Y = (short)rand.Next(Map.Size);
                 } while (!(Map[pos].Content == default && (Map[pos].Background is IBlock) && (Map[pos].Background as IBlock).IsSpawnArea));
                 Players[i].Position = pos;
                 Map[pos].Content = Players[i];
@@ -148,6 +159,32 @@ namespace Server.Models
                 if (commands[i].Players.All(p => p.Killed))
                     return i;
             return -1;
+        }
+
+        public void SandRegionMap(IClientProxy client, Position playerPosition, byte renderDistance)
+        {
+            Position leftTop;
+            var rendeRegion = Map.GetRenderChunks2D(playerPosition, renderDistance, out leftTop);
+            for (short ax = (short)(leftTop.X / ServerMap.ChunkSize), ix = 0; ix < rendeRegion.GetLength(0); ax++, ix++)
+                for (short ay = (short)(leftTop.Y / ServerMap.ChunkSize), iy = 0; iy < rendeRegion.GetLength(1); ay++, iy++)
+                {
+                    var item = rendeRegion[ix, iy];
+                    try
+                    {
+                        var b = ConvertTypes.ToBytes(item);
+                        var obj = ConvertTypes.ToObject<MapCell[,]>(b);
+                        client.SendAsync("GetMap", b, new Position(ax, ay), new Position(ix, iy),
+                            leftTop,
+                            (ix + 1 == rendeRegion.GetLength(0) && iy + 1 == rendeRegion.GetLength(1)),
+                            (ix == 0 && iy == 0));
+                    }catch(Exception ex)
+                    {
+                        File.WriteAllText($"{AppContext.BaseDirectory}crash_{DateTime.Now.Ticks}.log", 
+                            $"{ex}\n\n DATA[{ix}, {iy}]:\n{JsonConvert.SerializeObject(rendeRegion[ix, iy])}");
+                        throw new Exception(ex.Message);
+                    }            
+                }
+            GC.Collect();
         }
 
         public void Dispose()

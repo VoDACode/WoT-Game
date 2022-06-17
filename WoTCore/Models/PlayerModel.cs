@@ -10,51 +10,57 @@ using WoTCore.Models.MapObjects;
 
 namespace WoTCore.Models
 {
-    [Serializable()]
+    [Serializable]
     public enum TurnObject
     {
         Left, Right, Top, Bottom
     }
-    [Serializable()]
-    public class PlayerModel: IPlayer
+    [Serializable]
+    public class PlayerModel : IPlayer
     {
         private char[] icons = new char[] { '<', '>', '^', '˅' };
 
         private DateTime _lastStep = DateTime.Now;
         private DateTime _lastShotTime;
-        private string _name;
-        private string _session;
-        private string _uid;
-        private int _maxLife = 50;
-        private int _life = 50;
-        private int _command = -1;
+        private string _name = "";
+        private string _session = "";
+        private string _uid = "";
+        private short _maxLife = 50;
+        private short _life = 50;
+        private short _command = -1;
         private TurnObject _turn = TurnObject.Top;
         private Position _position;
+        private byte _renderDistance;
 
+        public byte RenderDistance
+        {
+            get => _renderDistance;
+            set => _renderDistance = value;
+        }
         public DateTime LastStep
         {
             get => _lastStep;
             set
             {
-                
+
                 _lastStep = value;
             }
         }
-        public int MaxLife
+        public short MaxLife
         {
             get => _maxLife;
             set
             {
-                
+
                 _maxLife = value;
             }
         }
-        public int Life
+        public short Life
         {
             get => _life;
             set
             {
-                
+
                 _life = value;
             }
         }
@@ -63,16 +69,16 @@ namespace WoTCore.Models
             get => _session;
             set
             {
-                
+
                 _session = value;
             }
         }
-        public int Command
+        public short Command
         {
             get => _command;
             set
             {
-                
+
                 _command = value;
             }
         }
@@ -81,16 +87,28 @@ namespace WoTCore.Models
             get => _position;
             set
             {
-                
                 _position = value;
             }
         }
+        [field: NonSerialized]
+        public Position PositionInChunks
+        {
+            get
+            {
+                return new Position((short)(Position.X / Map.ChunkSize + (Position.X % Map.ChunkSize > 0 ? 1 : 0)),
+                                    (short)(Position.Y / Map.ChunkSize + (Position.Y % Map.ChunkSize > 0 ? 1 : 0)));
+            }
+        }
+        [field: NonSerialized]
+        public Position TopLeftCorner
+                    => new Position((short)(Position.X - RenderDistance * Map.ChunkSize),
+                                    (short)(Position.Y - RenderDistance * Map.ChunkSize));
         public string Name
         {
             get => _name;
             set
             {
-                
+
                 _name = value;
             }
         }
@@ -99,7 +117,7 @@ namespace WoTCore.Models
             get => _lastShotTime;
             set
             {
-                
+
                 _lastShotTime = value;
             }
         }
@@ -108,7 +126,7 @@ namespace WoTCore.Models
             get => _turn;
             set
             {
-                
+
                 _turn = value;
             }
         }
@@ -140,31 +158,34 @@ namespace WoTCore.Models
             Position = new Position() { X = 0, Y = 0 };
         }
 
-        public bool TryGoTo(TurnObject turn, int size, Map map)
+        public bool TryGoTo(TurnObject turn, Map map)
         {
-            map[Position].Content = default;
             switch (turn)
             {
                 case TurnObject.Left:
-                    if (Position.X - 1 < 0 || map.ExistContent(Position.X - 1, Position.Y))
+                    map[Position].Content = EmptyObject.Empty;
+                    if (Position.X - 1 < 0 || map.ExistContent((short)(Position.X - 1), Position.Y))
                         return false;
                     Position.X--;
                     Position.Y = Position.Y;
                     break;
                 case TurnObject.Right:
-                    if (Position.X + 1 >= size || map.ExistContent(Position.X + 1, Position.Y))
+                    map[Position].Content = EmptyObject.Empty;
+                    if (Position.X + 1 >= map.Size || map.ExistContent((short)(Position.X + 1), Position.Y))
                         return false;
                     Position.X++;
                     Position.Y = Position.Y;
                     break;
                 case TurnObject.Top:
-                    if (Position.Y - 1 < 0 || map.ExistContent(Position.X, Position.Y - 1))
+                    map[Position].Content = EmptyObject.Empty;
+                    if (Position.Y - 1 < 0 || map.ExistContent(Position.X, (short)(Position.Y - 1)))
                         return false;
                     Position.Y--;
                     Position.X = Position.X;
                     break;
                 case TurnObject.Bottom:
-                    if (Position.Y + 1 >= size || map.ExistContent(Position.X, Position.Y + 1))
+                    map[Position].Content = EmptyObject.Empty;
+                    if (Position.Y + 1 >= map.Size || map.ExistContent(Position.X, (short)(Position.Y + 1)))
                         return false;
                     Position.Y++;
                     Position.X = Position.X;

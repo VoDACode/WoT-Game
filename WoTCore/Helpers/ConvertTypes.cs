@@ -2,24 +2,36 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Reflection;
+using System.Runtime.InteropServices;
+using System.Runtime.Serialization;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.Text;
 using System.Threading.Tasks;
+using WoTCore.Models;
 
 namespace System
 {
     public static class ConvertTypes
     {
-        public static byte[] ToBytes(this object obj)
+        public static byte[] ToBytes(object obj)
         {
-            if(obj == default)
-                return default;
-            BinaryFormatter bf = new BinaryFormatter();
-            MemoryStream ms = new MemoryStream();
-            bf.Serialize(ms, obj);
-            return ms.ToArray();
+            try
+            {
+                if (obj == default)
+                    return default;
+                BinaryFormatter bf = new BinaryFormatter();
+                MemoryStream ms = new MemoryStream();
+                bf.Serialize(ms, obj);
+                return ms.ToArray();
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"Error type: '{obj}'\n{ex}");
+            }
         }
-        public static object ToObject(this byte[] data)
+
+        public static object ToObject(byte[] data)
         {
             MemoryStream memStream = new MemoryStream();
             BinaryFormatter binForm = new BinaryFormatter();
@@ -28,9 +40,9 @@ namespace System
             var obj = binForm.Deserialize(memStream);
             return obj;
         }
-        public static T ToObject<T>(this byte[] data) where T : class
+        public static T ToObject<T>(byte[] data) where T : class
         {
-            return data.ToObject() as T;
+            return ToObject(data) as T;
         }
     }
 }

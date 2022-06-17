@@ -9,8 +9,8 @@ namespace WoTCore.Views
     public class JoinGameView
     {
         public int GameId { get; set; }
-        public int Command { get; set; }
-        public JoinGameView(int gameId, int command)
+        public short Command { get; set; }
+        public JoinGameView(int gameId, short command)
         {
             this.GameId = gameId;
             this.Command = command;

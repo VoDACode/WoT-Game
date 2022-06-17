@@ -1,14 +1,16 @@
 ﻿using System;
+using System.Drawing;
 using WoTCore.Models;
 using WoTCore.Modes;
 
 namespace DefaultMode.Blocks
 {
+    [Serializable()]
     public class Water : BaseBlock
     {
         public override int Durability { get; set; } = -1;
-        public override ConsoleColor BackgroundColor { get; set; } = ConsoleColor.Blue;
-        public override ConsoleColor ForegroundColor { get; set; } = ConsoleColor.Blue;
+        public override Color BackgroundColor { get; set; } = Color.Blue;
+        public override Color ForegroundColor { get; set; } = Color.Blue;
         public override char Icon { get; set; } = ' ';
         public override Position Position { get; set; }
 

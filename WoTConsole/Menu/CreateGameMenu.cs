@@ -78,7 +78,7 @@ namespace WoTConsole.Menu
         }
         private void CreateGame()
         {
-            Task.Factory.StartNew(() => Server.Program.Main(new string[] { $"port={port}" }));
+            Task.Factory.StartNew(() => Server.Program.Main(new [] { $"port={port}", "--no-log" }));
             NetworkServise.Instance.OnConnect += OnConnect;
             NetworkServise.Instance.Connect("127.0.0.1", port);
             Console.Title = $"Game '{menuResponse.Name}' 127.0.0.1:{port}";
@@ -93,7 +93,7 @@ namespace WoTConsole.Menu
                     return;
                 }
                 dynamic obj = JsonConvert.DeserializeObject(res.GetString().Result);
-                Game.Instance.Player.Command = (int)obj["command"];
+                Game.Instance.Player.Command = (short)obj["command"];
                 Game.Instance.GameId = (int)obj["gameId"];
 
                 Response = new MenuResponse(new MenuOpenResponse(MenuConfig.GameMenu));

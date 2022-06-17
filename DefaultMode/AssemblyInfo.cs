@@ -10,7 +10,7 @@ namespace DefaultMode
     public class AssemblyInfo
     {
 
-        public IReadOnlyList<ResourceInfo> AddedResources => new List<ResourceInfo> {
+        public static IReadOnlyList<ResourceInfo> AddedResources => new List<ResourceInfo> {
             new ResourceInfo(WoTCore.Enums.ResourceType.Blocks, "Stone"),
             new ResourceInfo(WoTCore.Enums.ResourceType.Blocks, "Bush"),
             new ResourceInfo(WoTCore.Enums.ResourceType.Blocks, "Water"),

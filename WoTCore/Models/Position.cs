@@ -7,11 +7,11 @@ using System.Threading.Tasks;
 
 namespace WoTCore.Models
 {
-    [Serializable()]
+    [Serializable]
     public class Position : NotifyPropertyChangedContext
     {
-        private int x, y;
-        public int X
+        private short x, y;
+        public short X
         {
             get => x;
             set
@@ -20,7 +20,7 @@ namespace WoTCore.Models
                 x = value;
             }
         }
-        public int Y
+        public short Y
         {
             get => y;
             set
@@ -34,7 +34,7 @@ namespace WoTCore.Models
             X = 0;
             Y = 0;
         }
-        public Position(int x, int y)
+        public Position(short x, short y)
         {
             X = x;
             Y = y;
@@ -45,7 +45,7 @@ namespace WoTCore.Models
             return new Position(X, Y);
         }
 
-        public bool Normalize(int xLimit, int yLimit)
+        public bool Normalize(short xLimit, short yLimit)
         {
             if (X <= 0)
             {
@@ -59,12 +59,12 @@ namespace WoTCore.Models
             }
             else if (X >= xLimit)
             {
-                X = xLimit - 1;
+                X = (short)(xLimit - 1);
                 return true;
             }
             else if (Y >= yLimit)
             {
-                Y = yLimit - 1;
+                Y = (short)(yLimit - 1);
                 return true;
             }
             return false;
@@ -73,5 +73,66 @@ namespace WoTCore.Models
         {
             return this.X == obj.X && this.Y == obj.Y;
         }
+
+        public static Position Parse(short x, short y)
+            => new Position(x, y);
+        public static Position operator +(Position a, Position b)
+            => new Position((short)(a.X + b.X), (short)(a.Y + b.Y));
+        public static Position operator -(Position a, Position b)
+            => new Position((short)(a.X - b.X), (short)(a.Y - b.Y));
+        public static Position operator *(Position a, Position b)
+            => new Position((short)(a.X * b.X), (short)(a.Y * b.Y));
+        public static Position operator /(Position a, Position b)
+        {
+            if (b.X == 0 || b.Y == 0)
+                throw new DivideByZeroException();
+            return new Position((short)(a.X / b.X), (short)(a.Y / b.Y));
+        }
+        public static Position operator +(Position a, short b)
+            => new Position((short)(a.X + b), (short)(a.Y + b));
+        public static Position operator -(Position a, short b)
+            => new Position((short)(a.X - b), (short)(a.Y - b));
+        public static Position operator *(Position a, short b)
+            => new Position((short)(a.X * b), (short)(a.Y * b));
+        public static short operator %(Position a, short b)
+            => (short)(a.X % b + a.Y % b);
+        public static Position operator /(Position a, short b)
+        {
+            if (b == 0)
+                throw new DivideByZeroException();
+            return new Position((short)(a.X / b), (short)(a.Y / b));
+        }
+
+        public static bool operator ==(Position a, Position b)
+        {
+            if (a is null && b is null)
+                return true;
+            if((!(a is null) && b is null) || (a is null && !(b is null)))
+                return false;
+            return a.X == b.X && a.Y == b.Y;
+        }
+        public static bool operator !=(Position a, Position b)
+            => !(a == b);
+
+        public static bool operator >(Position a, Position b)
+        {
+            if (a is null)
+                return false;
+            if (b is null)
+                return true;
+            return a.X > b.X && a.Y > b.Y;
+        }
+        public static bool operator <(Position a, Position b)
+        {
+            if (a is null)
+                return false;
+            if (b is null)
+                return true;
+            return a.X < b.X && a.Y < b.Y;
+        }
+        public static bool operator >=(Position a, Position b)
+            => a == b || a > b;
+        public static bool operator <=(Position a, Position b)
+            => a == b || a < b;
     }
 }

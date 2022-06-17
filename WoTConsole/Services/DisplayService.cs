@@ -63,7 +63,7 @@ namespace WoTConsole.Services
             drawQueue.Add(action);
         }
 
-        public void InitGameField(int size)
+        public void InitGameField(short size)
         {
             Size = size;
             Console.OutputEncoding = Encoding.UTF8;

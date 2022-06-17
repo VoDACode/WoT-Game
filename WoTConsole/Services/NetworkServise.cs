@@ -60,7 +60,7 @@ namespace WoTConsole.Services
         public async Task StopHub() => await hub.StopAsync();
         public async Task Connect(string host, int port)
         {
-            if(hub != null && (hub.State == HubConnectionState.Connected || hub.State == HubConnectionState.Connecting))
+            if (hub != null && (hub.State == HubConnectionState.Connected || hub.State == HubConnectionState.Connecting))
             {
                 await hub.StopAsync(CancellationToken.None);
                 await hub.DisposeAsync();
@@ -90,7 +90,14 @@ namespace WoTConsole.Services
             });
             hub.On("GetMap", (byte[] date) =>
             {
-                OnMapUpdate?.Invoke(date.ToObject<Dictionary<Position, MapCell>>());
+                try
+                {
+                    OnMapUpdate?.Invoke(ConvertTypes.ToObject<Dictionary<Position, MapCell>>(date));
+                }
+                catch (Exception ex)
+                {
+                    throw new Exception($"");
+                }
             });
             hub.On("UpdateGamesList", (string listJson) =>
             {
@@ -103,7 +110,7 @@ namespace WoTConsole.Services
             hub.On("EndGame", (bool isWin) => OnEndGame?.Invoke(isWin));
             hub.On("RestartGame", () => OnRestartGame?.Invoke());
             await hub.StartAsync();
-            
+
             if (!Auth())
             {
                 Console.Clear();
@@ -120,7 +127,7 @@ namespace WoTConsole.Services
             Http.Get($"{api}info/session?id={hub.ConnectionId}").Result.Replace("\"", "");
         public bool Auth() =>
             Http.Post($"{api}game/auth?id={hub.ConnectionId}&key={Config.VersionKey}&s={DisplayService.Instance.Size}").Result.StatusCode == HttpStatusCode.OK;
-        public HttpResponseMessage SetNick(string nick) => 
+        public HttpResponseMessage SetNick(string nick) =>
             Http.Post($"{api}game/set-nick?id={hub.ConnectionId}&n={nick}").Result;
         public HttpResponseMessage CreateGame(string name, int playerLimits) =>
             Http.Post($"{api}game/create?id={hub.ConnectionId}&n={name}&pl={playerLimits}").Result;
@@ -132,9 +139,6 @@ namespace WoTConsole.Services
             await hub.InvokeAsync("Shot");
         public async void UpdateGameList(bool sub) =>
              await hub.InvokeAsync($"{(sub ? "S" : "Uns")}ubToUpdateGameList");
-
-        public async void GetMap() =>
-            await hub.InvokeAsync("GetMap");
 
         public HttpResponseMessage SendMessage(string message) =>
             Http.Post($"{api}game/chat?id={hub.ConnectionId}&m={message}").Result;

@@ -2,10 +2,12 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SignalR;
 using Newtonsoft.Json;
+using Serilog;
 using Server.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using WoTCore;
 using WoTCore.Models;
 using WoTCore.Views;
@@ -31,7 +33,9 @@ namespace Server.Controllers
             if (key == Config.VersionKey && Storage.Instance.WaitUsersConnection.Any(p => p == id) && s > 5)
             {
                 Storage.Instance.WaitUsersConnection.Remove(id);
-                Storage.Instance.HubClients.Add(new HubClient(id, s));
+                var client = new HubClient(id, s);
+                Storage.Instance.HubClients.Add(client);
+                Log.Information($"Authed new client '{client.Player.Name}' - '{client.ConnectionId}'!");
                 return Ok();
             }
             return NotFound();
@@ -44,6 +48,7 @@ namespace Server.Controllers
                 return NotFound();
             if (string.IsNullOrEmpty(n) || !(n.Length <= 20 && n.Length > 1))
                 return BadRequest("1 > n.Length > 20");
+            Log.Information($"Player '{Client(id).Player.Name}' edit nick to '{n}'");
             Client(id).Player.Name = n;
             return Ok();
         }
@@ -55,31 +60,47 @@ namespace Server.Controllers
                 return NotFound();
             if (string.IsNullOrEmpty(n) || !(n.Length <= 16 && n.Length > 1) || pl < 2)
                 return BadRequest();
-            var game = Storage.Instance.Games.Add(new GameModel(0, n, pl));
-            game.OnEmpty += Game_OnEmpty;
-            game.OnLeave += Game_OnLeave;
-            game.Map.Clear();
-            game.Map.Generate(Storage.Instance.Modes);
-            hub.Groups.AddToGroupAsync(id, $"GAME_{game.Id}");
-            var command = game.AddPlayer(Client(id).Player);
-            Client(id).Player.Command = command;
-            hub.Groups.AddToGroupAsync(id, $"COMMAND_{game.Id}_{command}");
-            hub.Clients.Group("getGameList").SendAsync("UpdataGamesList", 
-                                                            JsonConvert.SerializeObject(
-                                                                Storage.Instance.Games.Select(
-                                                                    p => new GameInfoView(p.Id, p.Name, p.PlayerLimits, p.PlayerCount)
-                                                                    )
-                                                                )
-                                                            );
-
-            hub.Clients.Group($"GAME_{game.Id}").SendAsync("GetMap", game.Map.GetList.ToBytes());
-            hub.Groups.AddToGroupAsync(id, $"GAME_{game.Id}_CHAT");
-            hub.Clients.Client(id).SendAsync("Chat", $"'{Client(id).Player.Name}' welcome!");
-            return Ok(new
+            try
             {
-                gameId = game.Id,
-                command= command
-            });
+                Log.Information($"Start creat new game '{n}' (1\\{pl})...");
+                var game = Storage.Instance.Games.Add(new GameModel(0, n, pl));
+                game.OnEmpty += Game_OnEmpty;
+                game.OnLeave += Game_OnLeave;
+                game.Map.Clear();
+                Log.Information($"[Game - {game.Id}] Generate map {game.Map.Size}x{game.Map.Size}...");
+                game.Map.Generate(Storage.Instance.Modes);
+                Log.Information($"[Game - {game.Id}] Done generate!");
+                hub.Groups.AddToGroupAsync(id, $"GAME_{game.Id}");
+                Log.Information($"[Game - {game.Id}] Created group.");
+                var command = game.AddPlayer(Client(id).Player);
+                Log.Debug($"[Game - {game.Id}] command = '{command}'");
+                Client(id).Player.Command = command;
+                Log.Debug($"[Game - {game.Id}] Added player to command");
+                hub.Groups.AddToGroupAsync(id, $"COMMAND_{game.Id}_{command}");
+                Log.Debug($"[Game - {game.Id}] Created signalr group (COMMAND_{game.Id}_{command})");
+                hub.Clients.Group("getGameList").SendAsync("UpdataGamesList",
+                                                                JsonConvert.SerializeObject(
+                                                                    Storage.Instance.Games.Select(
+                                                                        p => new GameInfoView(p.Id, p.Name, p.PlayerLimits, p.PlayerCount)
+                                                                        )
+                                                                    )
+                                                                );
+                Log.Debug($"[Game - {game.Id}] send date to 'getGameList'");
+                Log.Information($"[Game - {game.Id}] Added player '{id}' to game.");
+                game.SandRegionMap(hub.Clients.Client(id), Client(id).Player.Position, 5);
+                hub.Groups.AddToGroupAsync(id, $"GAME_{game.Id}_CHAT");
+                hub.Clients.Client(id).SendAsync("Chat", $"'{Client(id).Player.Name}' welcome!");
+                Log.Information($"[Game - {game.Id}] Creation complete!");
+                return Ok(new
+                {
+                    gameId = game.Id,
+                    command = command
+                });
+            }catch(Exception ex)
+            {
+                Log.Error(ex.ToString());
+                throw new Exception(ex.Message);
+            }
         }
 
         [HttpPost("join")]
@@ -100,7 +121,7 @@ namespace Server.Controllers
             hub.Clients.Group($"GAME_{game.Id}_CHAT").SendAsync("Chat", $"'{Client(id).Player.Name}' join the game!");
             hub.Groups.AddToGroupAsync(id, $"GAME_{game.Id}_CHAT");
             hub.Clients.Client(id).SendAsync("Chat", $"'{Client(id).Player.Name}' welcome!");
-            hub.Clients.Group($"GAME_{game.Id}").SendAsync("GetMap", game.Map.GetList.ToBytes());
+            game.SandRegionMap(hub.Clients.Client(id), Client(id).Player.Position, 5);
 
             return Ok(new JoinGameView(game.Id, command));
         }

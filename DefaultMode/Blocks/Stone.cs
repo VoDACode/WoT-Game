@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Drawing;
 using WoTCore.Models;
 using WoTCore.Models.MapObjects;
 using WoTCore.Modes;
@@ -9,8 +10,8 @@ namespace DefaultMode.Blocks
     public class Stone : BaseBlock
     {
         public override int Durability { get; set; } = 100;
-        public override ConsoleColor BackgroundColor { get; set; } = ConsoleColor.Gray;
-        public override ConsoleColor ForegroundColor { get; set; } = ConsoleColor.Gray;
+        public override Color BackgroundColor { get; set; } = Color.Gray;
+        public override Color ForegroundColor { get; set; } = Color.Gray;
         public override char Icon { get; set; } = ' ';
         public override Position Position { get; set; } = new Position();
         public override bool IsSpawnArea { get; set; } = false;

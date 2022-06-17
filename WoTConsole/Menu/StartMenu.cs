@@ -39,7 +39,7 @@ namespace WoTConsole.Menu
 
         protected override void Build()
         {
-            int line = 0;
+            short line = 0;
             WriteString(line++, "WoT", isCeneter: true);
             WriteLine(line++);
         }

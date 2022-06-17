@@ -1,18 +1,23 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
 using SimplexNoise;
 using WoTCore.Helpers;
 
 namespace WoTCore.Models
 {
     [Serializable]
-    public sealed class Map
+    public class Map
     {
-        private MapCell[,] map { get; }
+        protected virtual MapCell[,] map { get; }
         public Dictionary<string, MapCell> UIDs { get; } = new Dictionary<string, MapCell>();
-        public int Size { get; }
+        public short Size { get; }
+        public const byte ChunkSize = 16;
+        public int GameId { get; set; }
 
-        public MapCell this[int x, int y]
+        public Action Generated;
+
+        public virtual MapCell this[short x, short y]
         {
             get => map[x, y];
             set => map[x, y] = value;
@@ -20,117 +25,115 @@ namespace WoTCore.Models
 
         public MapCell this[Position pos]
         {
-            get => map[pos.X, pos.Y];
-            set => map[pos.X, pos.Y] = value;
+            get => this[pos.X, pos.Y];
+            set => this[pos.X, pos.Y] = value;
         }
 
-        public Dictionary<Position, MapCell> GetList
+        public Map(short inСhunks)
         {
-            get
+            map = new MapCell[inСhunks * ChunkSize, inСhunks * ChunkSize];
+            Size = (short)(inСhunks * ChunkSize);
+            for (short x = 0; x < map.GetLength(0); x++)
             {
-                Dictionary<Position, MapCell> list = new Dictionary<Position, MapCell>();
-                for(int x = 0; x < Size; x++)
-                    for(int y = 0; y < Size; y++)
-                        list.Add(new Position(x, y), this[x, y]);
-                return list;
-            }
-        }
-
-        public Map(int size)
-        {
-            map = new MapCell[size, size];
-            Size = size;
-            for (int x = 0; x < size; x++)
-            {
-                for (int y = 0; y < size; y++)
+                for (short y = 0; y < map.GetLength(1); y++)
                 {
                     map[x, y] = new MapCell();
                 }
             }
         }
 
-        public bool ExistContent(int x, int y)
+        public bool ExistContent(short x, short y)
         {
-            return (x >= 0 && y >= 0 && x < Size && y < Size && this[x, y].Content != default);
-        }
-
-        public bool ExistContentSquared(Position pos)
-        {
-            if (pos.X >= map.GetLength(0) || pos.Y >= map.GetLength(1) || pos.Y < 0 || pos.X < 0)
+            if (x < 0 && y < 0 && x >= Size && y >= Size)
                 return false;
-            /* xy
-             * --   0-  +-
-             * -0   00  +0
-             * -+   0+  ++
-             */
-            #region if
-            if (pos.X - 1 >= 0 && pos.Y - 1 >= 0 && this[pos.X - 1, pos.Y - 1].Content != default)//--
-                return true;
-            else if (pos.X >= 0 && pos.Y - 1 >= 0 && this[pos.X, pos.Y - 1].Content != default)//0-
-                return true;
-            else if (pos.X + 1 >= 0 && pos.Y - 1 >= 0 && this[pos.X + 1, pos.Y - 1].Content != default)//+-
-                return true;
-            else if (pos.X - 1 >= 0 && pos.Y + 1 >= 0 && this[pos.X - 1, pos.Y + 1].Content != default)//-+
-                return true;
-            else if (pos.X - 1 >= 0 && pos.Y >= 0 && this[pos.X - 1, pos.Y].Content != default)//-0
-                return true;
-            else if (pos.X >= 0 && pos.Y + 1 >= 0 && this[pos.X, pos.Y + 1].Content != default)//0+
-                return true;
-            else if (pos.X + 1 >= 0 && pos.Y >= 0 && this[pos.X + 1, pos.Y].Content != default)//+0
-                return true;
-            else if (pos.X + 1 >= 0 && pos.Y + 1 >= 0 && this[pos.X + 1, pos.Y + 1].Content != default)//++
-                return true;
-            #endregion
-            return false;
+            var data = this[x, y].Content;
+            if (data is EmptyObject)
+                return false;
+            if (data is null)
+                return false;
+            return true;
         }
 
-        public Dictionary<Position, object> GetContentSquared(Position pos)
+        public MapCell[,] GetRegion2D(short x, short y, short w, short h)
         {
-            Dictionary<Position, object> list = new Dictionary<Position, object>();
-            if (pos.X - 1 >= 0 && pos.Y - 1 >= 0 && this[pos.X - 1, pos.Y - 1].Content != default)//--
-                list.Add(new Position(pos.X - 1, pos.Y - 1), this[pos.X - 1, pos.Y - 1].Content);
-            if (pos.X >= 0 && pos.Y - 1 >= 0 && this[pos.X, pos.Y - 1].Content != default)//0-
-                list.Add(new Position(pos.X, pos.Y - 1), this[pos.X, pos.Y - 1].Content);
-            if (pos.X + 1 >= 0 && pos.Y - 1 >= 0 && this[pos.X + 1, pos.Y - 1].Content != default)//+-
-                list.Add(new Position(pos.X + 1, pos.Y - 1), this[pos.X + 1, pos.Y - 1].Content);
-            if (pos.X - 1 >= 0 && pos.Y + 1 >= 0 && this[pos.X - 1, pos.Y + 1].Content != default)//-+
-                list.Add(new Position(pos.X - 1, pos.Y + 1), this[pos.X - 1, pos.Y + 1].Content);
-            if (pos.X - 1 >= 0 && pos.Y >= 0 && this[pos.X - 1, pos.Y].Content != default)//-0
-                list.Add(new Position(pos.X - 1, pos.Y), this[pos.X - 1, pos.Y].Content);
-            if (pos.X >= 0 && pos.Y + 1 >= 0 && this[pos.X, pos.Y + 1].Content != default)//0+
-                list.Add(new Position(pos.X, pos.Y + 1), this[pos.X, pos.Y + 1].Content);
-            if (pos.X + 1 >= 0 && pos.Y >= 0 && this[pos.X + 1, pos.Y].Content != default)//+0
-                list.Add(new Position(pos.X + 1, pos.Y), this[pos.X + 1, pos.Y].Content);
-            if (pos.X + 1 >= 0 && pos.Y + 1 >= 0 && this[pos.X + 1, pos.Y + 1].Content != default)//++
-                list.Add(new Position(pos.X + 1, pos.Y + 1), this[pos.X + 1, pos.Y + 1].Content);
+            if (x + w - 1 >= Size || y + h - 1 >= Size)
+                throw new IndexOutOfRangeException();
+            var list = new MapCell[w, h];
+            for (short ix = x; ix < x + w; ix++)
+                for (short iy = y; iy < y + h; iy++)
+                {
+                    list[ix - x, iy - y] = this[ix, iy];
+                }
             return list;
+        }
+
+        public MapCell[,] GetRenderRegion2D(Position playerPosition, byte renderDistance, out Position leftTop)
+            => GetRenderRegion2D(playerPosition.X, playerPosition.Y, renderDistance, out leftTop);
+
+        public MapCell[,] GetRenderRegion2D(short playerX, short playerY, byte renderDistance, out Position leftTop)
+        {
+            short renderToPixels() => (short)(renderDistance * ChunkSize);
+            leftTop = new Position(x: (short)(playerX - renderToPixels()), 
+                                   y: (short)(playerY - renderToPixels()));
+            Position rightBottom = new Position(x: (short)(playerX + renderToPixels()),
+                                                y: (short)(playerY + renderToPixels()));
+
+            MapCell[,] cells = new MapCell[renderToPixels() * 2, renderToPixels() * 2];
+
+            for (short ix = leftTop.X, x = 0; ix < rightBottom.X; ix++, x++)
+                for (short iy = leftTop.Y, y = 0; iy < rightBottom.Y; iy++, y++)
+                {
+                    if(ix < 0 || iy < 0 || ix >= Size || iy >= Size)
+                        cells[x, y] = new MapCell() { Background = EmptyObject.Empty };
+                    else
+                        cells[x, y] = this[ix, iy];
+                }
+            return cells;
+        }
+
+        public MapCell[,][,] GetRenderChunks2D(Position playerPosition, byte renderDistance, out Position leftTop)
+            => GetRenderChunks2D(playerPosition.X, playerPosition.Y, renderDistance, out leftTop);
+        public MapCell[,][,] GetRenderChunks2D(short playerX, short playerY, byte renderDistance, out Position leftTop)
+        {
+            var region = GetRenderRegion2D(playerX, playerY, renderDistance, out leftTop);
+            MapCell[,][,] chunks = new MapCell[region.GetLength(0) / Map.ChunkSize, region.GetLength(1) / Map.ChunkSize][,];
+            for (int cx = 0; cx < chunks.GetLength(0); cx++)
+                for (int cy = 0; cy < chunks.GetLength(1); cy++)
+                {
+                    chunks[cx, cy] = new MapCell[Map.ChunkSize, Map.ChunkSize];
+                    for (int x = 0; x < Map.ChunkSize; x++)
+                        for (int y = 0; y < Map.ChunkSize; y++)
+                            chunks[cx, cy][x, y] = region[cx * Map.ChunkSize + x, cy * Map.ChunkSize + y];
+                }
+            return chunks;
         }
 
         public void Clear()
         {
             UIDs.Clear();
-            for (int x = 0; x < Size; x++)
-                for (int y = 0; y < Size; y++)
+            for (short x = 0; x < Size; x++)
+                for (short y = 0; y < Size; y++)
                     this[x, y].Default();
         }
 
         public void Generate(List<ModeContent> modes)
         {
-            if(modes != null && modes.Count > 0)
+            if (modes != null && modes.Count > 0)
                 generateModeMap(modes);
             else
                 generateDefaultMap();
+            Generated?.Invoke();
         }
         private void generateDefaultMap()
         {
-            for (int x = 0; x < Size; x++)
+            for (short x = 0; x < Size; x++)
             {
-                for (int y = 0; y < Size; y++)
+                for (short y = 0; y < Size; y++)
                 {
-                    map[x, y].Background = new CellModel()
+                    this[x, y].Background = new CellModel()
                     {
-                        BackgroundColor = ConsoleColor.Black,
-                        ForegroundColor = ConsoleColor.White,
+                        BackgroundColor = Color.Black,
+                        ForegroundColor = Color.White,
                         Icon = ' '
                     };
                 }
@@ -139,10 +142,11 @@ namespace WoTCore.Models
         private void generateModeMap(List<ModeContent> modes)
         {
             Noise.Seed = new Random().Next(int.MaxValue);
-            float[,] noiseMap = Noise.Calc2D(Size, Size, 0.05f);
-            for (int x = 0; x < Size; x++)
+            //float[,] noiseMap = Noise.Calc2D(Size, Size, 0.0235f);
+            float[,] noiseMap = Noise.Calc2D(Size, Size, 0.005f);
+            for (short x = 0; x < Size; x++)
             {
-                for (int y = 0; y < Size; y++)
+                for (short y = 0; y < Size; y++)
                 {
                     foreach (var mode in modes)
                     {
@@ -175,6 +179,8 @@ namespace WoTCore.Models
                     }
                 }
             }
+            noiseMap = null;
+            GC.Collect();
         }
     }
 }

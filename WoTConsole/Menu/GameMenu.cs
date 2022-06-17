@@ -1,4 +1,5 @@
-﻿using WoTConsole.Models;
+﻿using System.Drawing;
+using WoTConsole.Models;
 using WoTConsole.Services;
 using WoTCore.Models;
 using WoTCore.Models.MapObjects;
@@ -34,7 +35,6 @@ namespace WoTConsole.Menu
             ControlService.Instance.OnLeft += EventLeftKey;
             ControlService.Instance.OnShot += EventSpace;
             NetworkServise.Instance.OnMapUpdate += Tick;
-            NetworkServise.Instance.GetMap();
         }
 
         protected override void LastEvent()
@@ -77,17 +77,17 @@ namespace WoTConsole.Menu
                         }
                         if (player.Killed)
                         {
-                            Field[position.X, position.Y].BackgroundColor = ConsoleColor.Gray;
-                            Field[position.X, position.Y].ForegroundColor = ConsoleColor.Black;
+                            Field[position.X, position.Y].BackgroundColor = Color.Gray;
+                            Field[position.X, position.Y].ForegroundColor = Color.Black;
                         }
                         else
                         {
                             if (player.Command != Player.Command)
-                                Field[position.X, position.Y].BackgroundColor = ConsoleColor.DarkRed;
+                                Field[position.X, position.Y].BackgroundColor = Color.DarkRed;
                             else if (player.Command == Player.Command && Player.Session != player.Session)
-                                Field[position.X, position.Y].BackgroundColor = ConsoleColor.DarkGreen;
+                                Field[position.X, position.Y].BackgroundColor = Color.DarkGreen;
                             else if (player.Command == Player.Command && Player.Session == player.Session)
-                                Field[position.X, position.Y].BackgroundColor = ConsoleColor.DarkYellow;
+                                Field[position.X, position.Y].BackgroundColor = Color.YellowGreen;
                         }
                     }
                     else if(obj.Value.Content is IProjectile)

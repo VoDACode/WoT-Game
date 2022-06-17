@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -8,11 +9,12 @@ using WoTCore.Modes;
 
 namespace DefaultMode.Blocks
 {
+    [Serializable()]
     public class Sand : BaseBlock
     {
         public override int Durability { get; set; } = -1;
-        public override ConsoleColor BackgroundColor { get; set; } = ConsoleColor.Yellow;
-        public override ConsoleColor ForegroundColor { get; set; } = ConsoleColor.Yellow;
+        public override Color BackgroundColor { get; set; } = Color.Yellow;
+        public override Color ForegroundColor { get; set; } = Color.Yellow;
         public override char Icon { get; set; } = ' ';
         public override Position Position { get; set; }
 

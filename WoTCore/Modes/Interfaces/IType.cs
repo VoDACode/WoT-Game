@@ -8,9 +8,8 @@ namespace WoTCore.Modes.Interfaces
 {
     public interface IType
     {
-        [field: NonSerialized]
-        public Type ItemType { get; set; }
-        [field: NonSerialized]
-        public object Item { get; }
+        public object GetObject();
+        public Type Type();
+        public void SetObject(object value);
     }
 }

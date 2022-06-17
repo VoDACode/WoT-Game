@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -12,8 +13,8 @@ namespace DefaultMode.Blocks
     public class Bush : BaseBlock
     {
         public override int Durability { get; set; } = 5;
-        public override ConsoleColor BackgroundColor { get; set; } = ConsoleColor.Green;
-        public override ConsoleColor ForegroundColor { get; set; } = ConsoleColor.Green;
+        public override Color BackgroundColor { get; set; } = Color.Green;
+        public override Color ForegroundColor { get; set; } = Color.Green;
         public override char Icon { get; set; } = ' ';
         public override Position Position { get; set; } = new Position();
 

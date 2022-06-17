@@ -41,5 +41,14 @@ namespace WoTCore.Models
             dictionary[propertyName] = this.GetType().GetProperty(propertyName).GetValue(this);
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
+
+        protected void CleanChanged()
+        {
+            dictionary.Clear();
+            foreach (var property in this.GetType().GetProperties())
+            {
+                dictionary.TryAdd(property.Name, property.GetValue(this));
+            }
+        }
     }
 }

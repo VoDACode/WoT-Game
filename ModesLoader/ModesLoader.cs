@@ -54,7 +54,8 @@ namespace ModesLoader
                     if (type == null)
                         throw new DllNotFoundException($"\"{dllRootName}\": resource '{dllRootName}.{resource.ResourceType}.{resource.Name}' not found.");
                     var iComponent = Activator.CreateInstance(type);
-
+                    if (type.GetCustomAttribute(typeof(SerializableAttribute)) == default)
+                        throw new Exception($"{dllRootName}.{resource.ResourceType}.{resource.Name}, can`t be serialized");
                     if (resource.ResourceType == WoTCore.Enums.ResourceType.Blocks)
                     {
                         var elemet = toType<BlockResource>(iComponent);
@@ -86,7 +87,7 @@ namespace ModesLoader
                     continue;
                 p.SetValue(resulr, m.GetValue(iObj));
             }
-            resulr.ItemType = iType;
+            resulr.SetObject(iObj);
             return resulr;
         }
 

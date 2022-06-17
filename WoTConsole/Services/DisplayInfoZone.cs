@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -105,7 +106,7 @@ namespace WoTConsole.Services
         {
             if (Game.Instance.Player.Command >= 0)
             {
-                CreateMenuHelper.ProgressBar(Field, 0, Game.Instance.Player.MaxLife, Game.Instance.Player.Life, color: ConsoleColor.DarkGreen, title: "HP");
+                CreateMenuHelper.ProgressBar(Field, 0, Game.Instance.Player.MaxLife, Game.Instance.Player.Life, color: Color.DarkGreen, title: "HP");
                 writeChat();
             }
             if (NetworkServise.Instance.IsConnected)
@@ -165,8 +166,8 @@ namespace WoTConsole.Services
                     Field[x, lastRow + 1].Icon = txt[x];
                     if (openedChat)
                     {
-                        Field[x, lastRow + 1].BackgroundColor = ConsoleColor.White;
-                        Field[x, lastRow + 1].ForegroundColor = ConsoleColor.Black;
+                        Field[x, lastRow + 1].BackgroundColor = Color.White;
+                        Field[x, lastRow + 1].ForegroundColor = Color.Black;
                     }
                 }
                 for(int p = 0, x = txt.Length, r = 1; p < chatMessage.Length; p++, x++)
@@ -195,22 +196,22 @@ namespace WoTConsole.Services
         }
         private void drawArr(bool ignoreSpace = true)
         {
-            for (int y = 0; y < Field.GetLength(1); y++)
+            for (short y = 0; y < Field.GetLength(1); y++)
             {
                 Console.SetCursorPosition(Marning.X, y);
                 Console.Write('|');
             }
-            for (int x = 0; x < Field.GetLength(0); x++)
+            for (short x = 0; x < Field.GetLength(0); x++)
             {
-                for (int y = 0; y < Field.GetLength(1); y++)
+                for (short y = 0; y < Field.GetLength(1); y++)
                 {
                     if (Field[x, y].Icon == ' ' && ignoreSpace)
                         continue;
                     var pos = new Position(x, y);
                     if (Field[x, y].Icon != ' ')
                     {
-                        Console.BackgroundColor = Field[x, y].BackgroundColor;
-                        Console.ForegroundColor = Field[x, y].ForegroundColor;
+                        Console.BackgroundColor = Field[x, y].BackgroundColor.ToConsoleColor();
+                        Console.ForegroundColor = Field[x, y].ForegroundColor.ToConsoleColor();
                     }
                     Console.SetCursorPosition(x + Marning.X + 1, y + Marning.Y);
                     Console.Write(Field[x, y].Icon);

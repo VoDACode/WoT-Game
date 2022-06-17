@@ -9,9 +9,9 @@ namespace WoTCore.Models
 {
     public interface IProjectile : IPosition, IIcon, IUniversalId, ICell
     {
-        public int Speed { get; set; }
-        public int Damage { get; set; }
-        public int Life { get; set; }
+        public short Speed { get; set; }
+        public short Damage { get; set; }
+        public short Life { get; set; }
         public PlayerModel Owner { get; }
         public TurnObject Turn { get; }
     }

@@ -1,0 +1,26 @@
+﻿<Window x:Class="WoTWpfClient.Menu.MenuWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:WoTWpfClient.Menu"
+        xmlns:page="clr-namespace:WoTWpfClient.Menu.Pages"
+        mc:Ignorable="d"
+        Title="MenuWindow" Height="450" Width="800" KeyDown="Window_KeyDown">
+    <Window.Resources>
+        <Style TargetType="Grid">
+            <Setter Property="Margin" Value="0 0 0 10"/>
+        </Style>
+        <Style TargetType="Button">
+            <Setter Property="Height" Value="40px"/>
+            <Setter Property="FontSize" Value="20px"/>
+        </Style>
+        <Style TargetType="Label">
+            <Setter Property="FontSize" Value="20px"/>
+        </Style>
+        <Style TargetType="TextBox">
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+            <Setter Property="FontSize" Value="20px"/>
+        </Style>
+    </Window.Resources>
+</Window>

@@ -13,11 +13,12 @@ namespace WoTCore.Models
         public DateTime LastShotTime { get; set; }
         public string Name { get; set; }
         public string Session { get; set; }
-        public int MaxLife { get; set; }
-        public int Life { get; set; }
-        public int Command { get; set; }
+        public short MaxLife { get; set; }
+        public short Life { get; set; }
+        public short Command { get; set; }
         public TurnObject Turn { get; set; }
         public bool Killed { get; }
-        public bool TryGoTo(TurnObject turn, int size, Map map);
+        public Position PositionInChunks { get; }
+        public bool TryGoTo(TurnObject turn, Map map);
     }
 }

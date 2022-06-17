@@ -1,12 +1,14 @@
-﻿using WoTConsole.Models;
+﻿using System.Drawing;
+using WoTConsole.Models;
 using WoTCore.Models;
 
 namespace WoTConsole.Helpers
 {
     static class CreateMenuHelper
     {
-        public static void ProgressBar(CellModel[,] arr, int yPos, int max, int val, int kX = 0, ConsoleColor color = ConsoleColor.Black, string title = default)
+        public static void ProgressBar(CellModel[,] arr, int yPos, int max, int val, int kX = 0, Color color = default, string title = default)
         {
+            color = color == default ? Color.Black : color;
             bool isTitle = !string.IsNullOrWhiteSpace(title);
             int rawCount = isTitle ? 4 : 3;
             string process = $"{val}/{max}";

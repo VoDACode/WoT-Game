@@ -9,27 +9,21 @@ using WoTCore.Models;
 using Server;
 using System.Diagnostics;
 using System.Net;
+using WoTCore.Game;
 
 namespace WoTConsole
 {
-    public class Game : IDisposable
+    public class Game : GameContext
     {
 
         private static Game _instance;
         public static Game Instance => _instance ?? (_instance = new Game());
-        private List<ModeContent> modes = new List<ModeContent>();
-        public IReadOnlyList<ModeContent> Modes => modes;
-        public PlayerModel Player { get; } = new PlayerModel();
-        public int GameId { get; set; } = 0;
-       
-        private int gameFieldSize = 40;
-        public Dictionary<string, object> ChangeValus { get; } = new Dictionary<string, object>();
 
         private Game()
         {
         }
 
-        public void Start()
+        public override void Start()
         {
             modes = ModesLoader.ModesLoader.Load();
             ServicePointManager.ServerCertificateValidationCallback +=
@@ -38,11 +32,6 @@ namespace WoTConsole
             DisplayService.Instance.Start();
             ControlService.Instance.Start();
             NetworkServise.Instance.Start();
-        }
-
-        public void Dispose()
-        {
-            
         }
     }
 }

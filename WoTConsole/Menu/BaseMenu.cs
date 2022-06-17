@@ -12,7 +12,7 @@ namespace WoTConsole.Menu
 {
     public abstract class BaseMenu
     {
-        private int _minMenuLen = 1000;
+        private short _minMenuLen = 1000;
         private MenuOptions deffaultOptions = new MenuOptions();
         private bool isUpdate = true;
         private bool isEnd = false;
@@ -40,9 +40,9 @@ namespace WoTConsole.Menu
                 this.VirtualPointerPosition.Y--;
                 this.PointerPosition.Y--;
                 if (this.VirtualPointerPosition.Y < 0)
-                    this.VirtualPointerPosition.Y = MenuComponents.Count - 1;
+                    this.VirtualPointerPosition.Y = (short)(MenuComponents.Count - 1);
                 if (this.PointerPosition.Y < this.StartPointerPosition.Y)
-                    this.PointerPosition.Y = this.StartPointerPosition.Y + MenuComponents.Count - 1;
+                    this.PointerPosition.Y = (short)(this.StartPointerPosition.Y + MenuComponents.Count - 1);
                 Field[PointerPosition.X, PointerPosition.Y].Icon = '>';
             }
             Updata();
@@ -228,13 +228,13 @@ namespace WoTConsole.Menu
                 for (int x = 0; x < Field.GetLength(1); x++)
                     Field[x, y + Options.Marning.Y].Icon = ' ';
             int lastMin = _minMenuLen;
-            int min = 10000000;
-            for (int i = 0; i < MenuComponents.Count; i++)
+            short min = short.MaxValue;
+            for (short i = 0; i < MenuComponents.Count; i++)
             {
                 var text = MenuComponents[i].Text;
                 foreach (var p in MenuPatterns)
                     text = text.Replace($"${p.Key}$", p.Value);
-                int pos = WriteString(i + Options.Marning.Y, text, isCeneter: Options.Center, setPosX: Options.Marning.X);
+                short pos = WriteString((short)(i + Options.Marning.Y), text, isCeneter: Options.Center, setPosX: Options.Marning.X);
                 if (pos < min)
                     min = pos;
             }
@@ -242,25 +242,25 @@ namespace WoTConsole.Menu
             {
                 _minMenuLen = min;
                 StartPointerPosition.Y = Options.Marning.Y;
-                StartPointerPosition.X = _minMenuLen - 1;
+                StartPointerPosition.X = (short)(_minMenuLen - 1);
                 PointerPosition.Y = Options.Marning.Y;
-                PointerPosition.X = _minMenuLen - 1;
+                PointerPosition.X = (short)(_minMenuLen - 1);
             }
             Field[_minMenuLen - 1, PointerPosition.Y].Icon = '>';
         }
 
-        protected int WriteString(int row, string text, bool isCeneter = false, int setPosX = 0) =>
+        protected short WriteString(short row, string text, bool isCeneter = false, short setPosX = 0) =>
             WriteString(Field, row, text, isCeneter, setPosX);
-        private int WriteString(CellModel[,] arr, int row, string text, bool isCeneter = false, int setPosX = 0)
+        private short WriteString(CellModel[,] arr, short row, string text, bool isCeneter = false, short setPosX = 0)
         {
-            int pos = isCeneter ? (arr.GetLength(1) - text.Length) / 2 + setPosX : setPosX;
-            int startPos = pos;
+            short pos = (short)(isCeneter ? (arr.GetLength(1) - text.Length) / 2 + setPosX : setPosX);
+            short startPos = pos;
             for (int i = 0, p = 0; i < text.Length; i++, p++)
             {
                 if (p + pos >= arr.GetLength(1))
                 {
                     row++;
-                    pos = isCeneter ? (arr.GetLength(1) - text.Length - i) / 2 + setPosX : setPosX;
+                    pos = (short)(isCeneter ? (arr.GetLength(1) - text.Length - i) / 2 + setPosX : setPosX);
                     p = 0;
                 }
                 arr[p + pos, row].Icon = text[i];
@@ -277,15 +277,15 @@ namespace WoTConsole.Menu
             drawArr(Field, ignoreSpace);
         private void drawArr(CellModel[,] arr, bool ignoreSpace = true)
         {
-            for (int x = 0; x < arr.GetLength(0); x++)
+            for (short x = 0; x < arr.GetLength(0); x++)
             {
-                for (int y = 0; y < arr.GetLength(1); y++)
+                for (short y = 0; y < arr.GetLength(1); y++)
                 {
                     if (arr[x, y].Icon == ' ' && ignoreSpace)
                         continue;
                     var pos = new Position(x, y);
-                    Console.BackgroundColor = arr[x, y].BackgroundColor;
-                    Console.ForegroundColor = arr[x, y].ForegroundColor;
+                    Console.BackgroundColor = arr[x, y].BackgroundColor.ToConsoleColor();
+                    Console.ForegroundColor = arr[x, y].ForegroundColor.ToConsoleColor();
                     OnBeforeWriteItem?.Invoke(arr[x, y], pos);
                     Console.SetCursorPosition(x + Magin.X, y + Magin.Y);
                     Console.Write(arr[x, y].Icon);

@@ -1,0 +1,36 @@
+﻿<Page x:Class="WoTWpfClient.Menu.Pages.StartPage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:WoTWpfClient.Menu.Pages"
+      mc:Ignorable="d" 
+      d:DesignHeight="450" d:DesignWidth="800"
+      Title="StartPage">
+    <Grid HorizontalAlignment="Center" Margin="0 60 0 0">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="auto"></RowDefinition>
+            <RowDefinition Height="auto"></RowDefinition>
+            <RowDefinition Height="auto"></RowDefinition>
+            <RowDefinition Height="auto"></RowDefinition>
+        </Grid.RowDefinitions>
+        
+        <Grid Grid.Row="0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="auto"></ColumnDefinition>
+                <ColumnDefinition Width="auto"></ColumnDefinition>
+            </Grid.ColumnDefinitions>
+            <Label Grid.Column="0">Enter your nick:</Label>
+            <TextBox Grid.Column="1" Width="190" MaxLength="32" MaxLines="1" x:Name="TextBox_Nick" TextChanged="TextBox_Nick_TextChanged"></TextBox>
+        </Grid>
+        <Grid Grid.Row="1">
+            <Button Grid.Row="1" x:Name="Button_CreateGame" Click="Button_CreateGame_Click">Create new game</Button>
+        </Grid>
+        <Grid Grid.Row="2">
+            <Button Grid.Row="2" x:Name="Button_JoinTheGame" Click="Button_JoinTheGame_Click">Join the game</Button>
+        </Grid>
+        <Grid Grid.Row="3">
+            <Button Grid.Row="3" x:Name="Button_Leave" Click="Button_Leave_Click">Leave</Button>
+        </Grid>
+    </Grid>
+</Page>

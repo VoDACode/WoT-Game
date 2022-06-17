@@ -1,4 +1,9 @@
-﻿using System;
+﻿using Newtonsoft.Json.Linq;
+using System;
+using System.Drawing;
+using System.Linq;
+using WoTCore.Modes;
+using WoTCore.Modes.Resources;
 
 namespace WoTCore.Models
 {
@@ -7,39 +12,41 @@ namespace WoTCore.Models
     {
         private object? _content = default;
         private object? _background = default;
-        public object Background {
+        public object Background
+        {
             get => _background;
             set
             {
                 if (!(value is ICell) && !(value is IEmptyObject) && value != default)
-                    throw new ArgumentException($"value does not implement the interface '{typeof(ICell)}'");
+                    throw new ArgumentException($"value ('{value}') does not implement the interface '{typeof(ICell)}' or '{typeof(IEmptyObject)}'");
                 _background = value;
             }
         }
         public object? Content
         {
-            get => _content;
+            get => _content as object;
             set
             {
                 if (!(value is ICell) && !(value is IPlayer) && !(value is IEmptyObject) && value != default)
-                    throw new ArgumentException($"value does not implement the interface '{typeof(ICell)}' or '{typeof(IPlayer)}' or '{typeof(IEmptyObject)}'");
+                    throw new ArgumentException($"value ('{value}') does not implement the interface '{typeof(ICell)}' or '{typeof(IPlayer)}' or '{typeof(IEmptyObject)}'");
                 _content = value;
             }
         }
 
-        public MapCell()
+        public MapCell(bool setToDefault = true)
         {
-            Default();
+            if (setToDefault)
+                Default();
         }
 
         public void Default()
         {
-            Content = default;
+            Content = new EmptyObject();
             Background = new CellModel()
             {
                 Icon = ' ',
-                BackgroundColor = ConsoleColor.Black,
-                ForegroundColor = ConsoleColor.White
+                BackgroundColor = Color.Black,
+                ForegroundColor = Color.White
             };
         }
     }

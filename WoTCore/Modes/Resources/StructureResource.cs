@@ -3,40 +3,30 @@ using System;
 using System.Collections.Generic;
 using WoTCore.Models;
 using WoTCore.Models.MapObjects;
+using System.Text.Json.Serialization;
 
 namespace WoTCore.Modes.Resources
 {
     [Serializable()]
     public class StructureResource : BaseStructure, IType
     {
-        [field: NonSerialized]
+        [JsonIgnore]
+        [NonSerialized()]
         private object _item;
-        [field: NonSerialized]
-        public Type ItemType { get; set; }
         public override Dictionary<Position, IBlock> Blocks { get; set; }
         public override Position Position { get; set; }
-        [field: NonSerialized]
-        public object Item
-        {
-            get
-            {
-                if (this._item == null)
-                    _item = Activator.CreateInstance(ItemType);
-                return _item;
-            }
-        }
 
         public override void Setup()
         {
-            ItemType.GetMethod("Setup").Invoke(Item, null);
+            Type().GetMethod("Setup").Invoke(GetObject(), null);
         }
         public override void Tick()
         {
-            ItemType.GetMethod("Tick").Invoke(Item, null);
+            Type().GetMethod("Tick").Invoke(GetObject(), null);
         }
         public override bool OnTouch(object sender)
         {
-            return (bool)ItemType.GetMethod("OnTouch", new Type[] { typeof(object) }).Invoke(Item, new[] { sender });
+            return (bool)Type().GetMethod("OnTouch", new Type[] { typeof(object) }).Invoke(GetObject(), new[] { sender });
         }
 
         public void Drow()
@@ -47,8 +37,8 @@ namespace WoTCore.Modes.Resources
                 if (x < 0 || y < 0 || Console.WindowHeight < y || Console.WindowWidth < x)
                     continue;
                 Console.SetCursorPosition(x, y);
-                Console.BackgroundColor = block.Value.BackgroundColor;
-                Console.ForegroundColor = block.Value.ForegroundColor;
+                Console.BackgroundColor = block.Value.BackgroundColor.ToConsoleColor();
+                Console.ForegroundColor = block.Value.ForegroundColor.ToConsoleColor();
                 Console.Write(block.Value.Icon);
             }
             Console.BackgroundColor = ConsoleColor.Black;
@@ -57,7 +47,13 @@ namespace WoTCore.Modes.Resources
 
         public override bool Generate(float val)
         {
-            return (bool)ItemType.GetMethod("Generate", new Type[] { typeof(float) }).Invoke(Item, new object[] { val });
+            return (bool)Type().GetMethod("Generate", new Type[] { typeof(float) }).Invoke(GetObject(), new object[] { val });
         }
+
+        public object GetObject() => _item;
+
+        public void SetObject(object value) => _item = value;
+
+        public Type Type() => _item.GetType();
     }
 }
