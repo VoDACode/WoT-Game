@@ -155,7 +155,13 @@ namespace Server.Controllers
             var game = Game(id);
             if(game == null)
                 return NotFound("Not found game!");
-
+            hub.Clients.Group("getGameList").SendAsync("UpdataGamesList",
+                                                JsonConvert.SerializeObject(
+                                                    Storage.Instance.Games.Select(
+                                                        p => new GameInfoView(p.Id, p.Name, p.PlayerLimits, p.PlayerCount)
+                                                        )
+                                                    )
+                                                );
             game.Restart();
             hub.Clients.Group($"GAME_{Game(id).Id}").SendAsync("RestartGame");
             return Ok();

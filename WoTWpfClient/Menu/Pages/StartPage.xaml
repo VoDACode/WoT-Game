@@ -6,7 +6,7 @@
       xmlns:local="clr-namespace:WoTWpfClient.Menu.Pages"
       mc:Ignorable="d" 
       d:DesignHeight="450" d:DesignWidth="800"
-      Title="StartPage">
+      Title="WoT Client">
     <Grid HorizontalAlignment="Center" Margin="0 60 0 0">
         <Grid.RowDefinitions>
             <RowDefinition Height="auto"></RowDefinition>

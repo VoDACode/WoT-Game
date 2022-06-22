@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
@@ -39,6 +38,7 @@ namespace WoTWpfClient.Menu.Pages
             NetworkServise.Instance.OnNewMessage += Instance_OnNewMessage;
             NetworkServise.Instance.OnUpdatePlayerInfo += Instance_OnUpdatePlayerInfo;
             NetworkServise.Instance.SetNick(Storage.Instance.Player.Name);
+            Title = $"{NetworkServise.Instance.Host}:{NetworkServise.Instance.Port}";
         }
 
         private void UpdatePing(object o)

@@ -21,6 +21,19 @@ namespace WoTWpfClient.Menu.Pages
         private static Regex Host = new Regex(@"^(([a-zA-Z0-9]|[a-zA-Z0-9][a-zA-Z0-9\-]*[a-zA-Z0-9])\.)*([A-Za-z0-9]|[A-Za-z0-9][A-Za-z0-9\-]*[A-Za-z0-9])$");
         public event Action OnBack;
         public event Action OnOpenGameField;
+        private bool _tryConnect = false;
+        private bool TryConnent
+        {
+            get => _tryConnect;
+            set
+            {
+                _tryConnect = value;
+                TextBox_Host.IsEnabled = !value;
+                TextBox_Port.IsEnabled = !value;
+                Button_Back.IsEnabled = !value;
+                Button_TryConnect.IsEnabled = !value;
+            }
+        }
 
         public ConnectionInfo ConnectionInfo { get; } = new ConnectionInfo();
         public JoinGamePage()
@@ -29,18 +42,18 @@ namespace WoTWpfClient.Menu.Pages
             TextBox_Port.Text = "5050";
             TextBox_Host.Text = "127.0.0.1";
             NetworkServise.Instance.OnUpdateGamesList += OnUpdateGamesList;
-        }        
+        }
 
         private void OnUpdateGamesList(List<GameInfoView> objects)
         {
             Dispatcher.Invoke(() =>
             {
-                foreach(var item in objects)
+                foreach (var item in objects)
                 {
                     Grid gridContect = new Grid();
-                    gridContect.ColumnDefinitions.Add(new ColumnDefinition() { Width = new GridLength(15, GridUnitType.Star)});
-                    gridContect.ColumnDefinitions.Add(new ColumnDefinition() { Width = new GridLength(70, GridUnitType.Star)});
-                    gridContect.ColumnDefinitions.Add(new ColumnDefinition() { Width = new GridLength(15, GridUnitType.Star)});
+                    gridContect.ColumnDefinitions.Add(new ColumnDefinition() { Width = new GridLength(15, GridUnitType.Star) });
+                    gridContect.ColumnDefinitions.Add(new ColumnDefinition() { Width = new GridLength(70, GridUnitType.Star) });
+                    gridContect.ColumnDefinitions.Add(new ColumnDefinition() { Width = new GridLength(15, GridUnitType.Star) });
                     var counter = new Label()
                     {
                         Content = $"{item.PlayerCount}/{item.PlayerLimits}"
@@ -100,10 +113,13 @@ namespace WoTWpfClient.Menu.Pages
         {
             try
             {
+                TryConnent = true;
                 await NetworkServise.Instance.Connect(ConnectionInfo.Host, ConnectionInfo.Port, 100);
                 NetworkServise.Instance.UpdateGameList(true);
-            }catch
+            }
+            catch
             {
+                TryConnent = false;
                 MessageBox.Show("Incorrect host or port");
             }
         }
