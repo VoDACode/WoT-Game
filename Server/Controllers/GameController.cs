@@ -91,6 +91,7 @@ namespace Server.Controllers
                 hub.Groups.AddToGroupAsync(id, $"GAME_{game.Id}_CHAT");
                 hub.Clients.Client(id).SendAsync("Chat", $"'{Client(id).Player.Name}' welcome!");
                 Log.Information($"[Game - {game.Id}] Creation complete!");
+                hub.Clients.Client(id).SendAsync("UpdatePlayer", Client(id).Player);
                 return Ok(new
                 {
                     gameId = game.Id,
@@ -122,6 +123,7 @@ namespace Server.Controllers
             hub.Groups.AddToGroupAsync(id, $"GAME_{game.Id}_CHAT");
             hub.Clients.Client(id).SendAsync("Chat", $"'{Client(id).Player.Name}' welcome!");
             game.SandRegionMap(hub.Clients.Client(id), Client(id).Player.Position, 5);
+            hub.Clients.Client(id).SendAsync("UpdatePlayer", Client(id).Player);
 
             return Ok(new JoinGameView(game.Id, command));
         }

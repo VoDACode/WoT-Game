@@ -69,11 +69,21 @@ namespace WoTCore.Models
             }
             return false;
         }
+        public Position GetNormalize(short xLimit, short yLimit)
+        {
+            var pos = new Position(X, Y);
+            pos.Normalize(xLimit, yLimit);
+            return pos;
+        }
         public bool Equals(Position obj)
         {
             return this.X == obj.X && this.Y == obj.Y;
         }
 
+        public Position AddX(short x)
+            => new Position((short)(X + x), Y);
+        public Position AddY(short y)
+            => new Position(X, (short)(Y + y));
         public static Position Parse(short x, short y)
             => new Position(x, y);
         public static Position operator +(Position a, Position b)

@@ -42,6 +42,17 @@ namespace WoTCore.Models
             }
         }
 
+        public bool TryGetValue(Position pos, out MapCell val)
+        {
+            if (pos.X < 0 || pos.X >= Size || pos.Y < 0 || pos.Y >= Size)
+            {
+                val = null;
+                return false;
+            }
+            val = this[pos];
+            return true;
+        }
+
         public bool ExistContent(short x, short y)
         {
             if (x < 0 && y < 0 && x >= Size && y >= Size)

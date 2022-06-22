@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:WoTWpfClient.Menu"
         xmlns:page="clr-namespace:WoTWpfClient.Menu.Pages"
         mc:Ignorable="d"
-        Title="MenuWindow" Height="450" Width="800" KeyDown="Window_KeyDown">
+        Title="MenuWindow" Height="600" Width="800" KeyDown="Window_KeyDown">
     <Window.Resources>
         <Style TargetType="Grid">
             <Setter Property="Margin" Value="0 0 0 10"/>

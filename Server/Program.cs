@@ -20,50 +20,52 @@ namespace Server
         private static Dictionary<string, string> Args = new Dictionary<string, string>();
         public static void Main(string[] args)
         {
-            if (_running)
-                return;
-            for (int i = 0; i < args.Length; i++)
-            {
-                if (args[i] == "--no-log")
-                {
-                    _noLog = true;
-                    continue;
-                }
-                else if (args[i] == "--debug")
-                {
-                    _debug = true;
-                    continue;
-                }
-                else if (args[i] == "--creare-new-game")
-                {
-                    _createNewGame = true;
-                    continue;
-                }
-                var tmp = args[i].Split('=');
-                Args.Add(tmp[0], tmp[1]);
-            }
-            if (!Args.ContainsKey("port"))
-                Args.Add("port", "5050");
-            if (!_noLog)
-            {
-                Log.Logger = new LoggerConfiguration()
-                    .WriteTo.Console()
-                    .MinimumLevel.Is(_debug ? Serilog.Events.LogEventLevel.Debug : Serilog.Events.LogEventLevel.Information)
-                    .CreateBootstrapLogger();
-                if (_debug)
-                    Log.Information("DEBUG MODE");
-            }
-            else
-            {
-                Log.Logger = new LoggerConfiguration()
-                    .WriteTo.Debug()
-                    .CreateBootstrapLogger();
-            }
-            _running = true;
-
             try
             {
-                Storage.Instance.Modes.AddRange(new List<ModeContent>
+                if (_running)
+                    throw new ArgumentException("App is runing");
+                for (int i = 0; i < args.Length; i++)
+                {
+                    if (args[i] == "--no-log")
+                    {
+                        _noLog = true;
+                        continue;
+                    }
+                    else if (args[i] == "--debug")
+                    {
+                        _debug = true;
+                        continue;
+                    }
+                    else if (args[i] == "--creare-new-game")
+                    {
+                        _createNewGame = true;
+                        continue;
+                    }
+                    var tmp = args[i].Split('=');
+                    Args.Add(tmp[0], tmp[1]);
+                }
+                if (!Args.ContainsKey("port"))
+                    Args.Add("port", "5050");
+                if (!_noLog)
+                {
+                    Log.Logger = new LoggerConfiguration()
+                        .WriteTo.Console()
+                        .MinimumLevel.Is(_debug ? Serilog.Events.LogEventLevel.Debug : Serilog.Events.LogEventLevel.Information)
+                        .CreateBootstrapLogger();
+                    if (_debug)
+                        Log.Information("DEBUG MODE");
+                }
+                else
+                {
+                    Log.Logger = new LoggerConfiguration()
+                        .WriteTo.Debug()
+                        .CreateBootstrapLogger();
+                }
+                _running = true;
+
+                try
+                {
+                    Storage.Instance.Modes.AddRange(new List<ModeContent>
                 {
                     new ModeContent(new WoTCore.Modes.AssemblyInfo()
                     {
@@ -79,28 +81,35 @@ namespace Server
                             blockToBlockResource(new DefaultMode.Blocks.Bush()),
                             blockToBlockResource(new DefaultMode.Blocks.Sand()),
                             blockToBlockResource(new DefaultMode.Blocks.Stone()),
-                            blockToBlockResource(new DefaultMode.Blocks.Water())
+                            blockToBlockResource(new DefaultMode.Blocks.Water()),
+                            blockToBlockResource(new DefaultMode.Blocks.Tree())
                         }
                     },
                 });
-            }
-            catch (Exception ex)
+                }
+                catch (Exception ex)
+                {
+                    Log.Error(ex.ToString());
+                    Console.WriteLine("Press Enter to close.");
+                    Console.ReadLine();
+                    return;
+                }
+                Log.Information($"Loaded {Storage.Instance.Modes.Count} modes.");
+
+                if (_createNewGame)
+                {
+                    var game = Storage.Instance.Games.Add(new GameModel(0, "TEST_GAME", 50));
+                    game.Map.Clear();
+                    game.Map.Generate(Storage.Instance.Modes);
+                }
+
+                CreateHostBuilder(args).Build().RunAsync().Wait();
+            }catch(Exception ex)
             {
                 Log.Error(ex.ToString());
                 Console.WriteLine("Press Enter to close.");
                 Console.ReadLine();
-                return;
             }
-            Log.Information($"Loaded {Storage.Instance.Modes.Count} modes.");
-
-            if (_createNewGame)
-            {
-                var game = Storage.Instance.Games.Add(new GameModel(0, "TEST_GAME", 50));
-                game.Map.Clear();
-                game.Map.Generate(Storage.Instance.Modes);
-            }
-
-            CreateHostBuilder(args).Build().RunAsync().Wait();
         }
 
         public static IHostBuilder CreateHostBuilder(string[] args) =>

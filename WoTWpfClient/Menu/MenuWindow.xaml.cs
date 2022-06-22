@@ -63,6 +63,7 @@ namespace WoTWpfClient.Menu
             await NetworkServise.Instance.Connect("127.0.0.1", createGamePage.GameInfo.Port, 400);
             void OnConnect()
             {
+                NetworkServise.Instance.SetNick(Storage.Instance.Player.Name);
                 var res = NetworkServise.Instance.CreateGame(createGamePage.GameInfo.Name, createGamePage.GameInfo.PlayerLimit);
                 if (res.StatusCode != HttpStatusCode.OK)
                 {
@@ -96,7 +97,7 @@ namespace WoTWpfClient.Menu
 
         private void Window_KeyDown(object sender, KeyEventArgs e)
         {
-            gameField.KeyDown(sender, e);
+            gameField.DownKey(sender, e);
         }
     }
 }

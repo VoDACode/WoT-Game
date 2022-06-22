@@ -4,7 +4,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.Json;
-using System.Threading;
 using System.Threading.Tasks;
 using WoTCore.Models;
 using WoTCore.Models.MapObjects;
@@ -16,6 +15,7 @@ namespace Server
     {
         private HubClient Client => Storage.Instance.HubClients.SingleOrDefault(p => p.ConnectionId == Context.ConnectionId);
         private GameModel Game => Client == null ? null : Storage.Instance.Games.SingleOrDefault(p => p.ExistPlayer(Client.Player));
+        private HubClient GetClient(PlayerModel player) => Storage.Instance.HubClients.SingleOrDefault(p => p.Player == player);
         public override Task OnConnectedAsync()
         {
             Storage.Instance.WaitUsersConnection.Add(Context.ConnectionId);
@@ -33,7 +33,6 @@ namespace Server
                     var game = Game;
                     Game.LeavePlayer(Client.Player);
                     await Clients.Group($"GAME_{game.Id}_CHAT").SendAsync("Chat", $"'{Client.Player.Name}' left the game!");
-                    //Game.SandAllMap(Clients);
                 }
                 Storage.Instance.HubClients.Remove(Client);
             }
@@ -94,6 +93,8 @@ namespace Server
                             break;
                         }
                         shotPlayer.Life -= projectile.Damage;
+                        var shotClient = GetClient(shotPlayer);
+                        await hub.Client(shotClient.ConnectionId).SendAsync("UpdatePlayer", shotPlayer);
                         projectile.Life = -1;
                         if (shotPlayer.Killed)
                         {
@@ -113,6 +114,7 @@ namespace Server
                                 }
                             }
                         }
+                        await updateMap(game, new List<object> { shotPlayer }, hub, client);
                         break;
                     }
                     if (!projectile.GetNextPos.Normalize((short)(game.Map.Size - 1), (short)(game.Map.Size - 1)) ||
@@ -122,14 +124,7 @@ namespace Server
                         var content = game.Map[projectile.GetNextPos].Content;
                         if (content is IBlock && (content as IBlock).CanBeBroken)
                         {
-                            (content as IBlock).Damage(projectile.Damage);
-                            projectile.Life = -1;
-                            game.Map[projectile.GetNextPos].Background = (content as IBlock).Background;
-                            game.Map[projectile.GetNextPos].Content = default;
-                            Dictionary<Position, MapCell> cells = new Dictionary<Position, MapCell>();
-                            cells.Add(projectile.GetNextPos, game.Map[projectile.GetNextPos]);
-                            await hub.Group($"GAME_{game.Id}").SendAsync("GetMap", ConvertTypes.ToBytes(cells));
-                            break;
+                            takeDamage(ref projectile, projectile.GetNextPos, null, ref game, ref hub, ref client, projectile.Damage);
                         }
                     }
                     await updateMap(game, new List<object> { projectile }, hub, client);
@@ -138,7 +133,7 @@ namespace Server
                         projectile.Life = -1;
                         break;
                     }
-                    Thread.Sleep(75);
+                    await Task.Delay(75);
                 }
                 await updateMap(game, new List<object> { new EmptyObject(){
                     Position = projectile.Position
@@ -189,7 +184,8 @@ namespace Server
                         Content = entity,
                         Background = game.Map[pos.Position].Background
                     },
-                    Position = pos.Position
+                    Position = pos.Position,
+                    LastPosition = pos.Position.PreliminaryState<Position>()
                 });
             }
 
@@ -202,6 +198,48 @@ namespace Server
             {
                 await clients.Group($"GAME_{game.Id}")
                     .SendAsync("UpdateMap", ConvertTypes.ToBytes(cells));
+            }
+        }
+
+        private void takeDamage(ref ProjectileModel projectile, Position targetPosItem, Position? callPos, ref GameModel game, ref IHubCallerClients hub, ref HubClient client, int r)
+        {
+            if (r <= 0)
+            {
+                projectile.Life = -1;
+                return;
+            }
+            if (!(callPos is null) && callPos == targetPosItem)
+                return;
+            MapCell cell;
+            if (!game.Map.TryGetValue(targetPosItem, out cell))
+                return;
+            if (!(cell.Content is IBlock) || !(cell.Content as IBlock).IsInteractive)
+                return;
+            var block = cell.Content as IBlock;
+            if (!block.Damage(projectile.Damage))
+            {
+                takeDamage(ref projectile, targetPosItem.AddX(1), targetPosItem, ref game, ref hub, ref client, r - 1);
+                takeDamage(ref projectile, targetPosItem.AddX(-1), targetPosItem, ref game, ref hub, ref client, r - 1);
+                takeDamage(ref projectile, targetPosItem.AddY(1), targetPosItem, ref game, ref hub, ref client, r - 1);
+                takeDamage(ref projectile, targetPosItem.AddY(-1), targetPosItem, ref game, ref hub, ref client, r - 1);
+                game.Map[targetPosItem].Background = block.Background;
+                game.Map[targetPosItem].Content = EmptyObject.Empty;
+                updateMap(game, new List<object>() {
+                                new EmptyObject(){
+                                    Position = targetPosItem
+                                }
+                            }, hub, client).Wait();
+            }
+            else
+            {
+                projectile.Life = -1;
+                game.Map[targetPosItem].Background = block.Background;
+                game.Map[targetPosItem].Content = EmptyObject.Empty;
+                updateMap(game, new List<object>() {
+                                new EmptyObject(){
+                                    Position = projectile.GetNextPos
+                                }
+                            }, hub, client).Wait();
             }
         }
     }

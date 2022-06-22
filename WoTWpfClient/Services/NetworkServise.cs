@@ -46,21 +46,21 @@ namespace WoTWpfClient.Services
         public event UpdateCells OnUpdateCells;
         public event Action<bool> OnEndGame;
         public event Action OnRestartGame;
+        public event Action OnUpdatePlayerInfo;
 
         public string Host => _host;
         public int Port => _port;
 
         protected override void Execute()
         {
-            Task.Factory.StartNew(() => UpdataPing());
         }
 
-        private void UpdataPing()
+        private async void UpdataPing()
         {
-            Thread.Sleep(500);
+            await Task.Delay(500);
             while (hub == null || hub.State != HubConnectionState.Connected)
-                Thread.Sleep(100);
-            hub.InvokeAsync("Ping", pingData);
+                await Task.Delay(100);
+            await hub.InvokeAsync("Ping", pingData);
             pingStartTime = DateTime.Now;
         }
 
@@ -90,6 +90,7 @@ namespace WoTWpfClient.Services
             hub.Closed += Hub_Closed;
             hub.Reconnected += Hub_Reconnected;
             hub.Reconnecting += Hub_Reconnecting;
+            await Task.Run(() => UpdataPing());
             hub.On("Pong", (string data) =>
             {
                 pingTime = DateTime.Now - pingStartTime;
@@ -120,6 +121,11 @@ namespace WoTWpfClient.Services
             });
             hub.On("EndGame", (bool isWin) => OnEndGame?.Invoke(isWin));
             hub.On("RestartGame", () => OnRestartGame?.Invoke());
+            hub.On("UpdatePlayer", (PlayerModel player) =>
+            {
+                Storage.Instance.Player = player;
+                OnUpdatePlayerInfo?.Invoke();
+            });
             await hub.StartAsync();
             
             if (!Auth(size))

@@ -23,12 +23,18 @@ namespace WoTCore.Modes
         public abstract bool IsInteractive { get; set; }
         public virtual ICell Background { get; set; }
 
-        public void Damage(int damage)
+        public bool Damage(int damage)
         {
             if (Durability >= damage)
+            {
                 Durability -= damage;
+                return true;
+            }
             else
+            {
                 Durability = 0;
+                return false;
+            }
         }
 
     }

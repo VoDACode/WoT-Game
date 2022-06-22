@@ -12,6 +12,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using WoTWpfClient.Services;
 
 namespace WoTWpfClient.Menu.Pages
 {
@@ -36,13 +37,13 @@ namespace WoTWpfClient.Menu.Pages
 
         private void Button_JoinTheGame_Click(object sender, RoutedEventArgs e)
         {
-            Storage.Instance.Nickname = TextBox_Nick.Text;
+            Storage.Instance.Player.Name = TextBox_Nick.Text;
             OnOpenGameJoinPage?.Invoke();
         }
 
         private void Button_CreateGame_Click(object sender, RoutedEventArgs e)
         {
-            Storage.Instance.Nickname = TextBox_Nick.Text;
+            Storage.Instance.Player.Name = TextBox_Nick.Text;
             OnOpenGameCreatePage?.Invoke();
         }
 
