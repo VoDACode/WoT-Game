@@ -24,9 +24,9 @@ namespace WoTCore.Modes.Resources
         {
             Type().GetMethod("Tick").Invoke(GetObject(), null);
         }
-        public override bool OnTouch(object sender)
+        public override bool OnTouch(object sender, MapCell cell)
         {
-            return (bool)Type().GetMethod("OnTouch", new Type[] { typeof(object) }).Invoke(GetObject(), new[] { sender });
+            return (bool)Type().GetMethod("OnTouch", new Type[] { typeof(object), typeof(MapCell) }).Invoke(GetObject(), new[] { sender, cell });
         }
 
         public void Drow()

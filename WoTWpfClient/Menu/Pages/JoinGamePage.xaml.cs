@@ -29,9 +29,7 @@ namespace WoTWpfClient.Menu.Pages
             TextBox_Port.Text = "5050";
             TextBox_Host.Text = "127.0.0.1";
             NetworkServise.Instance.OnUpdateGamesList += OnUpdateGamesList;
-        }
-
-        
+        }        
 
         private void OnUpdateGamesList(List<GameInfoView> objects)
         {
@@ -69,6 +67,7 @@ namespace WoTWpfClient.Menu.Pages
 
         private void Button_JoinToGame(int gameId)
         {
+            NetworkServise.Instance.SetNick(Storage.Instance.Player.Name);
             var res = NetworkServise.Instance.Join(gameId);
             if (res.StatusCode == HttpStatusCode.BadRequest)
             {

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using WoTCore.Models;
 
 namespace WoTCore.Modes
 {
@@ -10,6 +11,6 @@ namespace WoTCore.Modes
     public abstract class BaseEventsMapElement : BaseEvents, IGenerate
     {
         public abstract bool Generate(float val);
-        public virtual bool OnTouch(object sender) => false;
+        public virtual bool OnTouch(object sender, MapCell cell) => false;
     }
 }

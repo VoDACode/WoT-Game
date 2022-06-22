@@ -4,15 +4,12 @@ using System.Collections.Generic;
 using System.Linq;
 using WoTCore.Models;
 using WoTCore.Helpers;
-using SimplexNoise;
 using WoTCore.Models.MapObjects;
 using Serilog;
-using System.Threading;
 using Microsoft.AspNetCore.SignalR;
 using Newtonsoft.Json;
 using System.IO;
-using System.Diagnostics;
-using System.Text;
+using System.Threading.Tasks;
 
 namespace Server.Models
 {
@@ -118,7 +115,7 @@ namespace Server.Models
                 {
                     pos.X = (short)rand.Next(Map.Size);
                     pos.Y = (short)rand.Next(Map.Size);
-                } while (!(Map[pos].Content == default && (Map[pos].Background is IBlock) && (Map[pos].Background as IBlock).IsSpawnArea));
+                } while (!((((Map[pos].Background is IBlock) && (Map[pos].Background as IBlock).IsSpawnArea) || Map[pos].Background is MapCell) && Map[pos].Content is EmptyObject));
                 Players[i].Position = pos;
                 Map[pos].Content = Players[i];
                 Players[i].Life = Players[i].MaxLife;
@@ -144,6 +141,7 @@ namespace Server.Models
                 OnLeave?.Invoke(this, command, player);
             if (IsEmpty)
                 OnEmpty?.Invoke(this, null);
+            Map[player.Position].Content = default;
             return true;
         }
 
@@ -163,6 +161,7 @@ namespace Server.Models
 
         public void SandRegionMap(IClientProxy client, Position playerPosition, byte renderDistance)
         {
+
             Position leftTop;
             var rendeRegion = Map.GetRenderChunks2D(playerPosition, renderDistance, out leftTop);
             for (short ax = (short)(leftTop.X / ServerMap.ChunkSize), ix = 0; ix < rendeRegion.GetLength(0); ax++, ix++)
@@ -174,17 +173,19 @@ namespace Server.Models
                         var b = ConvertTypes.ToBytes(item);
                         var obj = ConvertTypes.ToObject<MapCell[,]>(b);
                         client.SendAsync("GetMap", b, new Position(ax, ay), new Position(ix, iy),
-                            leftTop,
-                            (ix + 1 == rendeRegion.GetLength(0) && iy + 1 == rendeRegion.GetLength(1)),
-                            (ix == 0 && iy == 0));
-                    }catch(Exception ex)
+                           leftTop,
+                           (ix + 1 == rendeRegion.GetLength(0) && iy + 1 == rendeRegion.GetLength(1)),
+                           (ix == 0 && iy == 0));
+                    }
+                    catch (Exception ex)
                     {
-                        File.WriteAllText($"{AppContext.BaseDirectory}crash_{DateTime.Now.Ticks}.log", 
+                        File.WriteAllText($"{AppContext.BaseDirectory}crash_{DateTime.Now.Ticks}.log",
                             $"{ex}\n\n DATA[{ix}, {iy}]:\n{JsonConvert.SerializeObject(rendeRegion[ix, iy])}");
                         throw new Exception(ex.Message);
-                    }            
+                    }
                 }
             GC.Collect();
+
         }
 
         public void Dispose()

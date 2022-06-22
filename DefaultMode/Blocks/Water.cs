@@ -19,7 +19,7 @@ namespace DefaultMode.Blocks
 
         public override bool Generate(float val)
         {
-            return val > 0 && val < 70;
+            return val > 0 && val < 55;
         }
     }
 }

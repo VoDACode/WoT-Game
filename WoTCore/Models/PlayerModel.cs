@@ -7,6 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using WoTCore.Helpers;
 using WoTCore.Models.MapObjects;
+using WoTCore.Modes;
 
 namespace WoTCore.Models
 {
@@ -25,8 +26,8 @@ namespace WoTCore.Models
         private string _name = "";
         private string _session = "";
         private string _uid = "";
-        private short _maxLife = 50;
-        private short _life = 50;
+        private short _maxLife = 100;
+        private short _life = 100;
         private short _command = -1;
         private TurnObject _turn = TurnObject.Top;
         private Position _position;
@@ -164,29 +165,54 @@ namespace WoTCore.Models
             {
                 case TurnObject.Left:
                     map[Position].Content = EmptyObject.Empty;
-                    if (Position.X - 1 < 0 || map.ExistContent((short)(Position.X - 1), Position.Y))
+                    if (Position.X - 1 < 0)
                         return false;
+                    if (map.ExistContent((short)(Position.X - 1), Position.Y))
+                    {
+                        if (map[(short)(Position.X - 1), Position.Y].Content is BaseBlock
+                            && !(map[(short)(Position.X - 1), Position.Y].Content as BaseBlock).OnTouch(this, map[(short)(Position.X - 1), Position.Y]))
+                            return false;
+                        
+                    }
                     Position.X--;
                     Position.Y = Position.Y;
                     break;
                 case TurnObject.Right:
                     map[Position].Content = EmptyObject.Empty;
-                    if (Position.X + 1 >= map.Size || map.ExistContent((short)(Position.X + 1), Position.Y))
+                    if (Position.X + 1 >= map.Size)
                         return false;
+                    if (map.ExistContent((short)(Position.X + 1), Position.Y))
+                    {
+                        if (map[(short)(Position.X + 1), Position.Y].Content is BaseBlock
+                            && !(map[(short)(Position.X + 1), Position.Y].Content as BaseBlock).OnTouch(this, map[(short)(Position.X + 1), Position.Y]))
+                            return false;
+                    }
                     Position.X++;
                     Position.Y = Position.Y;
                     break;
                 case TurnObject.Top:
                     map[Position].Content = EmptyObject.Empty;
-                    if (Position.Y - 1 < 0 || map.ExistContent(Position.X, (short)(Position.Y - 1)))
+                    if (Position.Y - 1 < 0)
                         return false;
+                    if (map.ExistContent(Position.X, (short)(Position.Y - 1)))
+                    {
+                        if (map[Position.X, (short)(Position.Y - 1)].Content is BaseBlock
+                            && !(map[Position.X, (short)(Position.Y - 1)].Content as BaseBlock).OnTouch(this, map[Position.X, (short)(Position.Y - 1)]))
+                            return false;
+                    }
                     Position.Y--;
                     Position.X = Position.X;
                     break;
                 case TurnObject.Bottom:
                     map[Position].Content = EmptyObject.Empty;
-                    if (Position.Y + 1 >= map.Size || map.ExistContent(Position.X, (short)(Position.Y + 1)))
+                    if (Position.Y + 1 >= map.Size)
                         return false;
+                    if (map.ExistContent(Position.X, (short)(Position.Y + 1)))
+                    {
+                        if (map[Position.X, (short)(Position.Y + 1)].Content is BaseBlock
+                            && !(map[Position.X, (short)(Position.Y + 1)].Content as BaseBlock).OnTouch(this, map[Position.X, (short)(Position.Y + 1)]))
+                            return false;
+                    }
                     Position.Y++;
                     Position.X = Position.X;
                     break;

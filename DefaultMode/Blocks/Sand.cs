@@ -1,9 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using WoTCore.Models;
 using WoTCore.Modes;
 
@@ -23,7 +19,7 @@ namespace DefaultMode.Blocks
 
         public override bool Generate(float val)
         {
-            return val >= 70 && val < 100;
+            return val >= 55 && val < 75;
         }
     }
 }

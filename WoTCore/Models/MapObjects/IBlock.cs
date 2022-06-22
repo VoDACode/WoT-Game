@@ -7,6 +7,6 @@
         public bool CanBeBroken { get; set; }
         public bool IsInteractive { get; set; }
         public ICell Background { get; set; }
-        public void Damage(int damage);
+        public bool Damage(int damage);
     }
 }
