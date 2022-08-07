@@ -104,6 +104,13 @@ namespace WoTSFMLClient.Items
             emptyCircle.FillColor = new Color(235, 255, 255);
         }
 
+        public override void Loaded()
+        {
+            _hover = false;
+            _mouseDown = false;
+            base.Loaded();
+        }
+
         public override void Draw(RenderTarget target, RenderStates states)
         {
             alignCalculate();
@@ -138,10 +145,6 @@ namespace WoTSFMLClient.Items
                     OnClick?.Invoke(this, mousePos);
                     _mouseDown = true;
                 }
-            }
-            else if(IsEnabled || _mouseDown)
-            {
-                _mouseDown = !_mouseDown;
             }
             if (!IsEnabled)
             {

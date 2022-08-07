@@ -1,11 +1,6 @@
 ﻿using SFML.Graphics;
 using SFML.System;
 using SFML.Window;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using WoTSFMLClient.Models;
 
 namespace WoTSFMLClient.Items
@@ -34,6 +29,9 @@ namespace WoTSFMLClient.Items
         {
             OwnerWindow = window;
         }
+
+        public virtual void Loaded() { }
+        public virtual void Unloaded() { }
 
         protected void alignCalculate()
         {

@@ -69,6 +69,17 @@ namespace WoTSFMLClient.Items
             }
         }
 
+        public uint FontSize
+        {
+            get => _content.CharacterSize;
+            set
+            {
+                _placeholder.CharacterSize = value;
+                _content.CharacterSize = value;
+                calcTextPos();
+            }
+        }
+
         public TextBox(Window window, Vector2f size) : this(window, new Vector2f(), size, string.Empty, string.Empty)
         { }
 
@@ -93,15 +104,22 @@ namespace WoTSFMLClient.Items
             calcTextPos();
         }
 
+        public override void Loaded()
+        {
+            OwnerWindow.TextEntered += TextEntered;
+            base.Loaded();
+        }
+
+        public override void Unloaded()
+        {
+            OwnerWindow.TextEntered -= TextEntered;
+            base.Unloaded();
+        }
+
         public override void Draw(RenderTarget target, RenderStates states)
         {
             var window = target as Window;
             alignCalculate();
-            if (!_loaed)
-            {
-                window.TextEntered += TextEntered;
-                _loaed = true;
-            }
             if (IsEnabled)
             {
                 var mousePos = Mouse.GetPosition(window);
@@ -137,7 +155,7 @@ namespace WoTSFMLClient.Items
 
         private void TextEntered(object? sender, TextEventArgs e)
         {
-            if (!_focus || OnPreviewChange?.Invoke(this, e.Unicode) == false || !IsEnabled)
+            if (!_focus || (!OnPreviewChange?.Invoke(this, e.Unicode) == false && e.Unicode != "\b") || !IsEnabled)
                 return;
             if (e.Unicode == "\b")
             {
