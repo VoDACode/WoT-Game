@@ -62,7 +62,7 @@ namespace WoTSFMLClient.Pages
                 "Back");
             backButton.HorizontalAlign = HorizontalAlignType.Center;
             backButton.OnClick += (e, s) => App.Navigator.Pop();
-
+            backButton.BorderRadius = 6;
             _items.Add(bg);
             _items.Add(nameBox);
             _items.Add(limitBox);

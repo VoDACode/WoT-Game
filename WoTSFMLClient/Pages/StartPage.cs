@@ -46,6 +46,7 @@ namespace WoTSFMLClient.Pages
             joinToGameButton.IsEnabled = false;
             joinToGameButton.BorderRadius = 6;
             joinToGameButton.HorizontalAlign = HorizontalAlignType.Center;
+            joinToGameButton.OnClick += JoinToGameButton_OnClick;
             exitButton = new Button(App.Window,
                 new PositionData(1, startPos + margin * 3, PositionUnits.Percentage),
                 new Vector2f(250, 75),
@@ -59,6 +60,11 @@ namespace WoTSFMLClient.Pages
             _items.Add(joinToGameButton);
             _items.Add(exitButton);
             Mouse.SetPosition(new Vector2i((int)(App.Window.Size.X / 2), (int)(App.Window.Size.Y / 2)), App.Window);
+        }
+
+        private void JoinToGameButton_OnClick(Button item, Vector2i mouse)
+        {
+            App.Navigator.Push(new JoinToGamePage());
         }
 
         private void CreateGameButton_OnClick(Button item, Vector2i mouse)
