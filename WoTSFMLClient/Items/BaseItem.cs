@@ -10,6 +10,9 @@ namespace WoTSFMLClient.Items
         public Window OwnerWindow { get; }
         public bool IsEnabled { get; set; } = true;
         public abstract void Draw(RenderTarget target, RenderStates states);
+
+        public FloatRect? Margin { get; set; }
+
         public abstract Vector2f Size { get; set; }
         public abstract PositionData Position { get; set; }
         protected PositionData _position { get; set; }
@@ -35,31 +38,32 @@ namespace WoTSFMLClient.Items
 
         protected void alignCalculate()
         {
-            var px = _positionInPixel;
             if (VerticalAlign == VerticalAlignType.Top)
             {
-                Position = new PositionData(px.X, 0);
+                Position = new PositionData(_positionInPixel.X, 0);
             }
             else if (VerticalAlign == VerticalAlignType.Bottom)
             {
-                Position = new PositionData(px.X, OwnerWindow.Size.Y - Size.Y);
+                Position = new PositionData(_positionInPixel.X, OwnerWindow.Size.Y - Size.Y);
             }
             else if (VerticalAlign == VerticalAlignType.Center)
             {
-                Position = new PositionData(px.X, (OwnerWindow.Size.Y - Size.Y) / 2);
+                Position = new PositionData(_positionInPixel.X, (OwnerWindow.Size.Y - Size.Y) / 2);
             }
             if (HorizontalAlign == HorizontalAlignType.Left)
             {
-                Position = new PositionData(0, px.Y);
+                Position = new PositionData(0, _positionInPixel.Y);
             }
             else if (HorizontalAlign == HorizontalAlignType.Right)
             {
-                Position = new PositionData(OwnerWindow.Size.X - Size.X, px.Y);
+                Position = new PositionData(OwnerWindow.Size.X - Size.X, _positionInPixel.Y);
             }
             else if (HorizontalAlign == HorizontalAlignType.Center)
             {
-                Position = new PositionData((OwnerWindow.Size.X - Size.X) / 2, px.Y);
+                Position = new PositionData((OwnerWindow.Size.X - Size.X) / 2, _positionInPixel.Y);
             }
+            Position = new PositionData(Position.X + (Margin?.Left ?? 0) - (Margin?.Width ?? 0),
+                Position.Y + (Margin?.Top ?? 0) - (Margin?.Height ?? 0));
         }
     }
 }

@@ -17,4 +17,18 @@
     </None>
   </ItemGroup>
 
+	<ItemGroup>
+		<Content Include="Sources\**">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</Content>
+	</ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Properties\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\WoTSFMLCore\WoTSFMLCore.csproj" />
+  </ItemGroup>
+
 </Project>

@@ -16,6 +16,7 @@ namespace WoTSFMLClient.Pages
         private Button createGameButton;
         private Button joinToGameButton;
         private Button exitButton;
+        private Button testButton;
         private Panel bg = new Panel(App.Window, new Color(235, 255, 255));
 
         public StartPage()
@@ -54,10 +55,18 @@ namespace WoTSFMLClient.Pages
             exitButton.BorderRadius = 6;
             exitButton.HorizontalAlign = HorizontalAlignType.Center;
             exitButton.OnClick += (e, s) => App.Exit();
+            testButton = new Button(App.Window,
+                new PositionData(1, startPos + margin * 4, PositionUnits.Percentage),
+                new Vector2f(250, 75),
+                "TEST");
+            testButton.BorderRadius = 6;
+            testButton.HorizontalAlign = HorizontalAlignType.Center;
+            testButton.OnClick += (e, s) => App.Navigator.Push(new GamePage());
             _items.Add(bg);
             _items.Add(nicknameBox);
             _items.Add(createGameButton);
             _items.Add(joinToGameButton);
+            _items.Add(testButton);
             _items.Add(exitButton);
             Mouse.SetPosition(new Vector2i((int)(App.Window.Size.X / 2), (int)(App.Window.Size.Y / 2)), App.Window);
         }

@@ -14,16 +14,26 @@ namespace WoTSFMLClient
         static App()
         {
             Window = new RenderWindow(new VideoMode(1000, 1000), "WoT SFML Client", Styles.Fullscreen);
+            Window.SetVerticalSyncEnabled(true);
+            Window.KeyPressed += Window_KeyPressed;
         }
+
+        private static void Window_KeyPressed(object? sender, KeyEventArgs e)
+        {
+            if (e.Alt && e.Code == Keyboard.Key.F4)
+                Exit();
+        }
+
         public static void Run()
         {
-            _isRunning = true;
+            _isRunning = true;;
             while (Window.IsOpen && IsRunning)
             {
+                Window.Clear();
                 foreach (Drawable drawable in drawables)
                     Window.Draw(drawable);
                 Window.Display();
-                Window.WaitAndDispatchEvents();
+                Window.DispatchEvents();
             }
             Window.Close();
         }
